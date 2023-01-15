@@ -1,0 +1,55 @@
+# [Introduction to Windows](https://academy.hackthebox.com/module/49/section/454)
+
+## The Windows Operating System
+
+First introduced on November 20, 1985.
+
+## Windows Versions
+
+|OS Names| Version Number|
+|---|---|
+|Windows NT4| 4.0|
+|Windows 2000| 5.0|
+|Windows XP| 5.1|
+|Windows Server 2003, 2003 R2| 5.2|
+|Windows Vista, Server 2008| 6.0|
+|Windows 7, Server 2008 R2| 6.1|
+|Windows 8, Server 2012| 6.2|
+|Windows 8.1, Server 2012 R2| 6.3|
+|Windows 10, Server 2016, Server 2019| 10.0|
+
+Get-WmiObject:
+
+```powershell
+PS C:\htb> Get-WmiObject -Class win32_OperatingSystem | select Version,BuildNumber
+
+Version    BuildNumber
+-------    -----------
+10.0.19041 19041
+```
+
+other class: Win32_Process, Win32_Service, Win32_Bios
+
+## Accessing Windows
+
+### Local Access Concepts
+
+### Remote Access Concepts
+
+- MSPs, MSSPs
+- Virtual Private Network: VPN
+- Secure Shell (SSH)
+- File Transfer Protocol (FTP)
+- Virtual Network Computing (VNC)
+- Windows Remote Management (or PowerShell Remoting) (WinRM)
+- Remote Desktop Protocol (RDP)
+
+### Remote Desktop Protocol
+
+- Uses a client/server architecture
+- Default port: 3389
+- Windows: Remote Desktop Connection (mstsc.exe)
+- Linux:
+  - xfreerdp: xfreerdp /v:target /u:username /p:password
+  - Remmina
+  - rdesktop

@@ -1,0 +1,80 @@
+# [Windows Services & Processes](https://academy.hackthebox.com/module/49/section/457)
+
+## Windows Services
+
+Windows services are managed via the Service Control Manager (SCM) system, accessible via the services.msc MMC add-in.
+
+It is also possible to query and manage services via the command line using sc.exe using PowerShell cmdlets such as Get-Service.
+
+```powershell
+PS C:\htb> Get-Service | ? {$_.Status -eq "Running"} | select -First 2 |fl
+
+
+Name                : AdobeARMservice
+DisplayName         : Adobe Acrobat Update Service
+Status              : Running
+DependentServices   : {}
+ServicesDependedOn  : {}
+CanPauseAndContinue : False
+CanShutdown         : False
+CanStop             : True
+ServiceType         : Win32OwnProcess
+
+Name                : Appinfo
+DisplayName         : Application Information
+Status              : Running
+DependentServices   : {}
+ServicesDependedOn  : {RpcSs, ProfSvc}
+CanPauseAndContinue : False
+CanShutdown         : False
+CanStop             : True
+ServiceType         : Win32OwnProcess, Win32ShareProcess
+```
+
+Service statuses can appear as:
+
+- Running
+- Stopped
+- Paused
+
+They can be set to start:
+
+- manually
+- automatically
+- delay at system boot
+
+Windows has three categories of services:
+
+- Local Services
+- Network Services
+- System Services
+
+Services can usually only be created, modified, and deleted by users with administrative privileges
+
+Misconfigurations around service permissions are a common privilege escalation vector on windows systems
+
+Some `critical system services`:
+
+- cannot be stopped and restarted without a system restart
+- if update any file or resource in use by on of these services, we must restart the system
+
+This [link](https://en.wikipedia.org/wiki/List_of_Microsoft_Windows_components#Services) has a list of Windows components, including key services.
+
+### Processes
+
+Processes run in the background on Windows systems. They either run automatically as part of the Windows operating system or are started by other installed applications.
+
+Processes associated with installed applications can often be terminated without causing a severe impact on the operating system. Certain processes are critical and, if terminated, will stop certain components of the operating system from running properly. Some examples include the Windows Logon Application, System, System Idle Process, Windows Start-Up Application, Client Server Runtime, Windows Session Manager, Service Host, and Local Security Authority Subsystem Service (LSASS) process.
+
+### Local Security Authority Subsystem Service (LSASS)
+
+`lsass.exe` is the process that is responsible for enforcing the security policy on Windows systems. When a user attempts to log on to the system, this process verifies their log on attempt and creates access tokens based on the user's permission levels. LSASS is also responsible for user account password changes. All events associated with this process (logon/logoff attempts, etc.) are logged within the Windows Security Log. LSASS is an extremely high-value target as several tools exist to extract both cleartext and hashed credentials stored in memory by this process.
+
+### Sysinternals Tools
+
+The SysInternals Tools suite is a set of portable Windows applications that can be used to administer Windows systems (for the most part without requiring installation).
+
+The tools can be:
+
+- downloaded from the Microsoft website
+- loading them directly from an internet-accessible file share by typing `\\live.sysinternals.com\tools` into a Windows Explorer window.
