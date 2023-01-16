@@ -1,0 +1,1 @@
+https://portswigger.net/web-security/all-labs#access-control-vulnerabilities

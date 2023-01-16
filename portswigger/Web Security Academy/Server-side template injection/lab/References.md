@@ -1,0 +1,1 @@
+https://portswigger.net/web-security/all-labs#server-side-template-injection
