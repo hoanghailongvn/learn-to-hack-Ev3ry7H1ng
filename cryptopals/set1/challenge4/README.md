@@ -1,9 +1,10 @@
 # **[set 1 - challenge 4](https://cryptopals.com/sets/1/challenges/4): Detect single-character XOR**
 
-## Final
-Tương tự challenge 3:
+## Solutions
 
-```
+Same as challenge 3:
+
+```text
 from binascii import unhexlify
 from cmath import inf
 import string
@@ -52,8 +53,9 @@ if __name__ == "__main__":
     print(f"plain text: {b_plaintext}")
 ```
 
-Kết quả:
-```
+Result:
+
+```text
 line: 171
 key: 53
 score: 5
