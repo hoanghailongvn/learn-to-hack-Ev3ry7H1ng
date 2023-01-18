@@ -22,7 +22,7 @@ If we xor the cipher text with the key again, we can get the plaintext, this is 
 
 Because the keyspace is small, we can use brute force to try each key and observe the result.
 
-But, when the keyspace is larger, we can't manually check the results one by one. Ưe need a way to automatically score each result.
+But, when the keyspace is larger, we can't manually check the results one by one. We need a way to automatically score each result.
 
 Based on the different of possibility of each character is being used, we can use this posibility to score the results.
 
