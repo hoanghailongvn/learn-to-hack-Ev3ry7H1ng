@@ -1,8 +1,27 @@
 # **[set 1 - challenge 2](https://cryptopals.com/sets/1/challenges/2): Fixed XOR**
+
+Write a function that takes two equal-length buffers and produces their XOR combination.
+
+If your function works properly, then when you feed it the string:
+
+```text
+1c0111001f010100061a024b53535009181c
+```
+
+... after hex decoding, and when XOR'd against:
+
+```text
+686974207468652062756c6c277320657965
+```
+
+... should produce:
+
+746865206b696420646f6e277420706c6179
+
 ## XOR
-### Khái niệm
+
 XOR is a bitwise operator, and it stands for "exclusive or." It performs logical operation. If input bits are the same, then the output will be false(0) else true(1).
-### Bảng chân lý
+
 | A| B | A XOR B|
 |- | - | :-----:|
 | 0| 0 | 0      |
@@ -10,9 +29,11 @@ XOR is a bitwise operator, and it stands for "exclusive or." It performs logical
 | 1| 0 | 1      |
 | 1| 1 | 0      |
 
-## Challenge
+## Solutions
+
 Python script:
-```
+
+```text
 from binascii import unhexlify
 
 input1 = unhexlify('1c0111001f010100061a024b53535009181c')
@@ -25,25 +46,33 @@ for i in range(len(input1)):
 
 print(bytes(output) == expected_result)
 ```
-Trong đó, unhexlify có chức năng là chuyển đổi string biểu diễn đưới dạng hexadecimal về dữ liệu kiểu binary: [detailed](../README.md)
+
+unhexlify: string represented in hexadecimal to binary data
 
 Result:
-```
+
+```bash
 ┌──(kali㉿kali)-[~/Documents/cryptopals]
 └─$ python script.py
 True
 ```
 
 ## Easter egg
-Nếu ta print ra input2 và expected_result:
-```
+
+If we print the contents of input2 and expected_result:
+
+```text
 print(input2)
 print(expected_result)
 ```
+
 Output:
-```
+
+```text
 b"hit the bull's eye"
 b"the kid don't play"
 ````
 
 ## References
+
+[binascii.unhexlify](https://docs.python.org/3/library/binascii.html#binascii.unhexlify)
