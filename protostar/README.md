@@ -1,6 +1,16 @@
-# week9
+# [Protostar](https://exploit.education/protostar/)
+
+This is my writeup for all the protostar challenges written in Vietnamese: https://exploit.education/protostar/.
+
+Protostar challenges covers the following topics:
+
+- Network programming
+- Stack overflows
+- Format string vulnerabilities
+- Heap overflows
 
 ## Setup
+
 - Cài đặt 1 máy ảo kali và 1 máy protostar:
 
 <img src="pictures/setup_vm.png">
@@ -22,11 +32,14 @@
 <img src="pictures/ssh.png">
 
 ## Tools
+
 - gdb.
-- Radare2: (also known as r2) is a complete framework for reverse-engineering and analyzing binaries; composed of a set of small utilities that can be used together or independently from the command line. Built around a disassembler for computer software which generates assembly language source code from machine-executable code, it supports a variety of executable formats for different processor architectures and operating systems. 
+- Radare2: (also known as r2) is a complete framework for reverse-engineering and analyzing binaries; composed of a set of small utilities that can be used together or independently from the command line. Built around a disassembler for computer software which generates assembly language source code from machine-executable code, it supports a variety of executable formats for different processor architectures and operating systems.
 
 ### Radare2
+
 static:
+
 - aaa: analysis
 - afl: list function
 - axt: xref to
@@ -46,7 +59,8 @@ debug mode:
 - ...
 
 # Reference
-- Binary exploitation: https://youtube.com/playlist?list=PLhixgUqwRTjxglIswKp9mpkfPNfHkzyeN
-- VirtualBox Networking: https://www.youtube.com/watch?v=cDF4X7RmV4Q
-- Radare2 tutorial: https://youtube.com/playlist?list=PLg_QXA4bGHpvsW-qeoi3_yhiZg8zBzNwQ
-- The official Radare2 Book: https://book.rada.re/
+
+- Binary exploitation: <https://youtube.com/playlist?list=PLhixgUqwRTjxglIswKp9mpkfPNfHkzyeN>
+- VirtualBox Networking: <https://www.youtube.com/watch?v=cDF4X7RmV4Q>
+- Radare2 tutorial: <https://youtube.com/playlist?list=PLg_QXA4bGHpvsW-qeoi3_yhiZg8zBzNwQ>
+- The official Radare2 Book: <https://book.rada.re/>
