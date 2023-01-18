@@ -22,10 +22,10 @@ Always operate on raw bytes, never on encoded strings. Only use hex and base64 f
 
 ## Base64
 
-Base64:
+Base64 is:
 
-- encoding scheme: represents binary data in an ASCII string format.
-- is designed to carry data stored in binary formats across channels that only reliably support text content.
+- a encoding scheme: represents binary data in an ASCII string format.
+- designed to carry data stored in binary formats across channels that only reliably support text content.
 
 ### How does base64 work
 
