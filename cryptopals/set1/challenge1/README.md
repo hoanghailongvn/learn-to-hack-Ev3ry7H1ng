@@ -22,17 +22,17 @@ Always operate on raw bytes, never on encoded strings. Only use hex and base64 f
 
 ## Base64
 
-### Definition
+Base64:
 
-Base64 is a group of [binary-to-text encoding](https://en.wikipedia.org/wiki/Binary-to-text_encoding) chemes.
-
-### Propose
-
-Common to all binary-to-text encoding schemes, Base64 is designed to carry data stored in binary formats across channels that only reliably support text content.
+- encoding scheme: represents binary data in an ASCII string format.
+- is designed to carry data stored in binary formats across channels that only reliably support text content.
 
 ### How does base64 work
 
-Each 24bits can be represented by four 6-bit Base64 digits.
+Each 6 bits will be encoded according to the base64 table:
+![base64-table.png](./pictures/base64-table.png)
+
+Padding characters might be added to make the last encoded block contain four Base64 characters. => length of base64 output always divisible by 4
 
 ### Examples
 
@@ -48,9 +48,7 @@ Ex1: 1 bytes => needs 2 padding characters (==)
 
 <img src="pictures/M.png">
 
-=> length of base64 output always divisible by 4
-
-## Challenge
+## Solutions
 
 ```bash
 ┌──(kali㉿kali)-[~]
@@ -59,11 +57,11 @@ SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t
 ```
 
 - xxd: make a hexdump or do the reverse
-  - -r: revertw
+  - -r: revert
   - -p: Output in postscript continuous hexdump style. Also known as plain hexdump style.
 - base64: base64 - base64 encode/decode data and print to standard output
 
-## Easter egg
+## Flag
 
 ```bash
 ┌──(kali㉿kali)-[~]
