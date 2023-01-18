@@ -24,8 +24,6 @@ Because the keyspace is small, we can use brute force to try each key and observ
 
 But, when the keyspace is larger, we can't manually check the results one by one. We need a way to automatically score each result.
 
-Based on the different of possibility of each character is being used, we can use this posibility to score the results.
-
 Based on the different possibilities of each character being used in English, we can use this possibility to score the results.
 
 From [Frequency Analysis](https://inventwithpython.com/hacking/chapter20.html), we have a simple method to score a string using python:
