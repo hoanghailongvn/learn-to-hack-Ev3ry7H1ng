@@ -46,7 +46,7 @@ if __name__ == "__main__":
     print(repeating_key_xor(plaintext, key) == unhexlify(expected_ciphertext))
 ```
 
-Kết quả:
+Result:
 
 ```text
 True
