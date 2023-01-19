@@ -1,37 +1,44 @@
 # **[set 1 - challenge 7](https://cryptopals.com/sets/1/challenges/7): AES in ECB mode**
 
 ## What is AES?
+
 AES:
-- Là viết tắt của Advanced Encryption Standard
+
+- stands for Advanced Encryption Standard
 - block cipher
-- key size có thể là 128/192/256 bits
-- mã hóa từng block 128 bits
+- key size: 128/192/256 bits
+- encrypts data in blocks of 128 bits each
 
 "AES relies on substitution-permutation network principle which means it is performed using a series of linked operations which involves replacing and shuffling of the input data." - [geeksforgeeks](https://www.geeksforgeeks.org/advanced-encryption-standard-aes/)
-## What is ECB mode?
-ECB:
-- Là viết tắt của Electronic Code Block
-- Là một trong các mode trong block cipher
-- Trong đó:
-    - Plaintext được chia làm các blocks bằng nhau
-    - Cùng được mã hóa với key k
 
-    <img src="pictures/ecb.png">
+## What is ECB mode?
+
+ECB:
+
+- stands for Electronic Code Block
+- Is one of the modes in block cipher:
+  - The plaintext is divided into blocks of the same size (P1, P2, ..., Pn).
+  - Each block is encrypted with the same key k
+
+![ecb.png](./pictures/ecb.png)
 
 - Advantages:
-    - Nhanh
-    - Có thể sử dụng kỹ thuật đa luồng để tăng tốc tính toán do các blocks không liên quan đến nhau
+  - fast
+  - multithreading can be used to speed up the computation since blocks are independent of each other
 - Disadvantages:
-    - Với 2 plaintext giống nhau, sẽ cùng mã hóa ra ciphertext, ví dụ nổi tiếng:
+  - With the same 2 plaintext, are encrypted to the same ciphertext, a famous example:
 
-    <img src="pictures/penguin.jpg">
+    ![penguin.jpg](./pictures/penguin.jpg)
 
 ## Decrypt with python
-python script, cần cài đặt thư viện pycryptodome:
-- b1: decode với base64
-- b2: tạo cryptor với key "YELLOW SUBMARINE" AES
-- b3: decrypt với cryptor
-```
+
+python script, required pycryptodome package:
+
+- step 1: decode with base64
+- step 2: create `cryptor` with key "YELLOW SUBMARINE" AES
+- step 3: decrypt with `cryptor`
+
+```python
 from Crypto.Cipher import AES
 import base64
 
@@ -48,8 +55,10 @@ if __name__ == "__main__":
     
     print(plaintext)
 ```
-Kết quả:
-```
+
+result:
+
+```text
 I'm back and I'm ringin' the bell 
 A rockin' on the mike while the fly girls yell
 In ecstasy in the back of me
@@ -133,7 +142,8 @@ Play that funky music
 ```
 
 ## References
-- Block cipher modes: 
-    - https://www.educba.com/block-cipher-modes-of-operation/
-- AES: 
-    - https://www.geeksforgeeks.org/advanced-encryption-standard-aes/
+
+- Block cipher modes:
+  - <https://www.educba.com/block-cipher-modes-of-operation/>
+- AES:
+  - <https://www.geeksforgeeks.org/advanced-encryption-standard-aes/>
