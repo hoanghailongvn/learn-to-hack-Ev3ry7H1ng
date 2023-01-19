@@ -1,38 +1,53 @@
 # **[set 2 - challenge 10](https://cryptopals.com/sets/2/challenges/10): Implement CBC mode**
 
+CBC mode is a block cipher mode that allows us to encrypt irregularly-sized messages, despite the fact that a block cipher natively only transforms individual blocks.
+
+In CBC mode, each ciphertext block is added to the next plaintext block before the next call to the cipher core.
+
+The first plaintext block, which has no associated previous ciphertext block, is added to a "fake 0th ciphertext block" called the initialization vector, or IV.
+
+Implement CBC mode by hand by taking the ECB function you wrote earlier, making it encrypt instead of decrypt (verify this by decrypting whatever you encrypt to test), and using your XOR function from the previous exercise to combine them.
+
+[The file here](./10.txt) is intelligible (somewhat) when CBC decrypted against "YELLOW SUBMARINE" with an IV of all ASCII 0 (\x00\x00\x00 &c)
+
 ## What is CBC mode?
+
 CBC:
-- Là viết tắt của Cipher block chaining
-- Là một trong các mode trong block cipher như ECB
-- Trong đó, giống với ECB:
-    - Plain text được chia làm các blocks bằng nhau
-    - Cùng được mã hóa với key k
-- Khác ECB ở chỗ:
-    - Mỗi block plaintext trước khi được mã hóa với key sẽ xor với ciphertext của block trước đó
-    - Block đầu tiên thì sẽ xor với "fake 0th ciphertext block", gọi là `initialization vector` viết tắt là IV
 
-<img src="pictures/CBC_e.png">
+- stands for Cipher block chaining
+- is one of the modes in block cipher like ECB
+- similar to ECB:
+  - The plaintext is divided into blocks of the same size (P1, P2, ..., Pn).
+  - Each block is encrypted with the same key k
+- different from ECB:
+  - each plaintext block before being encrypted with the key will be XORed with the ciphertext of the previous block
+  - the first block is XORed with `IV`, which stands for `initialization vector`, 'fake 0th ciphertext blocks'
 
-<img src="pictures/CBC_d.png">
+    ![CBC_e.png](./pictures/CBC_e.png)
+
+    ![CBC_d.png](./pictures/CBC_d.png)
 
 - Advantages:
-    - Không còn bị vấn đề về bảo mật như ECB mode: 2 plain text giống nhau không mã hóa thành 2 cipher text giống nhau
+  - No more security problem like ECB mode: 2 same plaintext does not encrypt into 2 same ciphertext anymore
 - Disadvantages:
-    - Chậm
-    - Không sử dụng được kỹ thuật đa luồng như ECB mode do phải tính toán lần lượt.
+  - slower than ECB mode
+  - Because to encrypt this block, we have the encryption result of the previous block, so we can't use multithreading like ECB.
 
-## Challenge
-Như để bài, ta nên sử dụng AES decrypt với ECB mode, viết thêm code để thành CBC mode:
-- Với từng block cipher text từ trái sang phải:
-    - 1. decrypt như ecb mode
-    - 2. xor với block cipher text trước nó (block đầu tiên thì xor với iv)
+## Solutions
+
+as the challenge requires, we can only implement AES code with ECB mode, requiring us to write additional code to become CBC mode:
+
+- with each ciphertext block from left to right:
+  - 1. decrypt like ECB mode
+  - 2. xor with previous ciphertext block (first block: XOR with iv)
 
 Python code:
-```
+
+```python
 import base64
 from Crypto.Cipher import AES
 
-# xor 2 bytes object có độ dài bằng nhau
+# xor 2 bytes object have the same length
 def stream_xor(input1: bytes, input2: bytes) -> bytes:
     if len(input1) != len(input2):
         assert("stream_xor: length not equal!")
@@ -41,9 +56,9 @@ def stream_xor(input1: bytes, input2: bytes) -> bytes:
     return ret
 
 # CBC mode decrypt
-# Với mỗi block, decrypt với 2 bước:
-# - decrypt với ECB mode
-# - xor với block cipher text trước đó
+# With each block, decrypt by 2 step:
+# - decrypt by ECB mode
+# - xor with previous ciphertext block
 def AES_decrypt(ciphertext: bytes, key: bytes, mode: str, iv=None) -> bytes:
     if mode == 'cbc':
         if iv is None:
@@ -78,8 +93,10 @@ if __name__ == "__main__":
     plaintext = AES_decrypt(ciphertext, b'YELLOW SUBMARINE', 'cbc', iv)
     print(plaintext.decode())
 ```
-Kết quả:
-```
+
+result:
+
+```text
 I'm back and I'm ringin' the bell 
 A rockin' on the mike while the fly girls yell
 In ecstasy in the back of me
@@ -161,4 +178,5 @@ Play that funky music, white boy Come on, Come on, Come on
 Play that funky music
 ♦♦♦♦
 ```
+
 ## References

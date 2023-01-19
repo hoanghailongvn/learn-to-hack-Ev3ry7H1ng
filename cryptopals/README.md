@@ -31,6 +31,8 @@ This is a collection of exercises that demonstrate attacks on real-world crypto.
   - padding in block cipher
   - PKCS#7
 - [challenge10: Implement CBC mode](./set2/challenge10/)
+  - block cipher
+  - CBC: Cypher block chaining
 - [challenge11: An ECB/CBC detection oracle](./set2/challenge11/)
 - [challenge12: Byte-at-a-time ECB decryption (Simple)](./set2/challenge12/)
 - [challenge13: ECB cut-and-paste](./set2/challenge13/)
