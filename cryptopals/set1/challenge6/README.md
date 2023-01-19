@@ -1,8 +1,40 @@
 # **[set 1 - challenge 6](https://cryptopals.com/sets/1/challenges/6): Break repeating-key XOR**
 
+There's a file here. It's been base64'd after being encrypted with repeating-key XOR.
+
+Decrypt it.
+
+Here's how:
+
+1. Let KEYSIZE be the guessed length of the key; try values from 2 to (say) 40.
+2. Write a function to compute the edit distance/Hamming distance between two strings. The Hamming distance is just the number of differing bits. The distance between:
+
+    ```text
+    this is a test
+    ```
+
+    and
+
+    ```text
+    wokka wokka!!!
+    ```
+
+    is 37. Make sure your code agrees before you proceed.
+
+3. For each KEYSIZE, take the first KEYSIZE worth of bytes, and the second KEYSIZE worth of bytes, and find the edit distance between them. Normalize this result by dividing by KEYSIZE.
+4. The KEYSIZE with the smallest normalized edit distance is probably the key. You could proceed perhaps with the smallest 2-3 KEYSIZE values. Or take 4 KEYSIZE blocks instead of 2 and average the distances.
+5. Now that you probably know the KEYSIZE: break the ciphertext into blocks of KEYSIZE length.
+6. Now transpose the blocks: make a block that is the first byte of every block, and a block that is the second byte of every block, and so on.
+7. Solve each block as if it was single-character XOR. You already have code to do this.
+8. For each block, the single-byte XOR key that produces the best looking histogram is the repeating-key XOR key byte for that block. Put them together and you have the key.
+
+This code is going to turn out to be surprisingly useful later on. Breaking repeating-key XOR ("Vigenere") statistically is obviously an academic exercise, a "Crypto 101" thing. But more people "know how" to break it than can actually break it, and a similar technique breaks something much more important.
+
 ## Hamming distance
-Hamming distance giữa 2 string là tổng số bit khác nhau:
-```
+
+Hamming distance between 2 strings is the total number of different bits:
+
+```python
 def hamming_distance(input1: bytes, input2: bytes):
     ret = 0
     
@@ -16,34 +48,31 @@ def hamming_distance(input1: bytes, input2: bytes):
     
     return ret
 ```
-## Tìm keysize với hamming distance
-Theo như đề bài gợi ý, ta sử dụng hamming distance để tìm keysize.
 
-Ta sẽ thử với KEYSIZE lần lượt từ 2 đến khoảng 40.
+## Why we can find KEYSIZE with hamming distance
 
-Với mỗi `KEYSIZE`, tính hamming distance giữa block thứ nhất và block thứ hai có cùng `KEYSIZE` bytes của cipher text. Chia hamming distance tính được cho `KEYSIZE` để chuẩn hóa.
+Perfect answer for this question [here](https://crypto.stackexchange.com/a/8118)
 
-Với hamming distance đã chuẩn hóa nhỏ nhất => keysize.
+Hamming distance between two random English letters, encoded in ASCII has a high probability that it will be smaller than the hamming distance between two random 8-bit bytes.
 
-**Giải thích**
+So with the correct KEYSIZE, the hamming distance between blocks will be small and vice versa.
 
-Hamming distance giữa các ký tự trong bảng chữ cái có xác suất cao sẽ nhỏ hơn hamming distance giữa 2 số bất kỳ trong khoảng [0-255]
+## Solutions
 
-Với keysize đúng, hamming distance giữa các block sẽ nhỏ, và ngược lại.
+- Step 1: decode ciphertext bằng base64:
 
-## Final
-Các bước cần làm:
-- B1: decode ciphertext bằng base64:
-    ```
+    ```python
     ciphertext = base64.b64decode(file.read())
     ```
-- B2: Tìm keysize bằng hamming distance:
-    - Hàm score_KEYSIZE (score càng nhỏ càng tốt):
-        - Chia ciphertext thành các khối có kích thước `KEYSIZE`
-        - Tính tổng hamming distance giữa các khối 0 và 1, 1 và 2, 2 và 3, ...
-        - Chia cho `KEYSIZE` để chuẩn hóa
-        - Chia cho số lượng các hamming distance đã tính
-    ```
+
+- Step 2: Find KEYSIZE with hamming distance:
+  - score_KEYSIZE function:
+    - Split the ciphertext into blocks of size `KEYSIZE`
+    - Sum the hamming distance between blocks 0 and 1, 1 and 2, 2 and 3, ...
+    - Divide by `KEYSIZE` to normalize
+    - Divide by the number of calculated hamming distances
+
+    ```python
     def score_KEYSIZE(ciphertext: bytes, KEYSIZE: int):
         max_nb_block = len(ciphertext) // KEYSIZE - 1
         
@@ -56,8 +85,10 @@ Các bước cần làm:
 
         return score
     ```
-    - Hàm guess_KEYSIZE trả về keysize có score nhỏ nhất
-    ```
+
+  - guess_KEYSIZE function returns the `KEYSIZE` that has smallest score_KEYSIZE value:
+
+    ```python
     def guess_KEYSIZE(ciphertext: bytes):
         min = inf
         ret = -1
@@ -69,14 +100,16 @@ Các bước cần làm:
 
         return ret
     ```
-- B3: Khi đã có keysize, chia bài toán `crack repeating-key XOR` thành các bài toán `crack Single-byte XOR`, ví dụ:
-    - plaintext: "MESSAGETEXT" được mã hóa bằng `repeating-key XOR` với key "ICE"
-    - => 3 plaintext "MSEX", "EATT", "SGE" được mã hóa bằng `single-byte XOR` với key lần lượt là "I", "C", "E"
+
+- B3: With the correct `KEYSIZE`, we can simplify the `crack repeating-key XOR` problem to multiple `crack Single-byte XOR` problems, for example:
+  - plaintext: "MESSAGETEXT" encrypted by `repeating-key XOR` with the key "ICE"
+  - => 3 plaintext "MSEX", "EATT", "SGE" encrypted by `single-byte XOR` with key is "I", "C", "E" respectively:
 
     <img src="pictures/repeat_to_single.svg">
 
-    - Trong hàm cracking_repeat_xor, sử dụng lại hàm cracking_single_xor đã viết ở challenge3 để tìm từng ký tự trong key:
-    ```
+  - reuse the cracking_single_xor function written in [challenge 3](../challenge3/):
+
+    ```python
     def cracking_repeat_xor(ciphertext: bytes):
         guessed_keysize = guess_KEYSIZE(ciphertext)
         print(f"guessed keysize: {guessed_keysize}")
@@ -90,8 +123,9 @@ Các bước cần làm:
         print(repeating_key_xor(ciphertext, bytes(key)).decode())
     ```
 
-Ghép tất cả lại:
-```
+put it all together:
+
+```python
 import base64
 from cmath import inf
 import string
@@ -185,8 +219,10 @@ if __name__ == "__main__":
         print(f"Key: {key}")
         print(f"Plaintext: \n{b_plaintext.decode()}")
 ```
-Kết quả:
-```
+
+Result:
+
+```text
 guessed keysize: 29
 Key: b'Terminator X: Bring the noise'
 Plaintext: 
@@ -272,4 +308,6 @@ Play that funky music
 ```
 
 ## References
-- Hamming distance: https://nayak.io/posts/whats-so-special-about-the-hamming-distance/
+
+- Hamming distance: <https://nayak.io/posts/whats-so-special-about-the-hamming-distance/>
+- <https://crypto.stackexchange.com/a/8118>
