@@ -6,7 +6,7 @@ if __name__ == "__main__":
         ciphertext = (file.read())
         file.close()
 
-    # Đếm số lần xuất hiện của từng block 16 bits trong mỗi dòng lưu vào dict
+    # count the number of times each 16-bit block appears and save to dict
     dict_cipher = {}
     for i, line in enumerate(ciphertext.split('\n')):
         b_line = binascii.unhexlify(line)
@@ -19,7 +19,7 @@ if __name__ == "__main__":
             else:
                 dict_cipher[i][blockk] = 1
 
-    # In ra block nào xuất hiện nhiều hơn 1 lần
+    # print out which block appears more than once
     for line in dict_cipher:
         for blockk in dict_cipher[line]:
             if dict_cipher[line][blockk] != 1:

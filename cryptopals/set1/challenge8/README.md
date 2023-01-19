@@ -1,11 +1,16 @@
 # **[set 1 - challenge 8](https://cryptopals.com/sets/1/challenges/8): Detect AES in ECB mode**
 
-Như đã nói trong challenge 7 cũng như là đề bài gợi ý, ecb sẽ cho ra block ciphertext giống nhau với các block plaintext giống nhau.
+In [this file](./8.txt) are a bunch of hex-encoded ciphertexts.
 
-Mỗi block 16 bits.
+One of them has been encrypted with ECB.
 
-=> Kiểm tra từng dòng trong file txt: đếm số lần xuất hiện của từng block:
-```
+Detect it.
+
+Remember that the problem with ECB is that it is stateless and deterministic; the same 16 byte plaintext block will always produce the same 16 byte ciphertext.
+
+## Solutions
+
+```python
 import binascii
 from Crypto.Cipher import AES
 
@@ -14,7 +19,7 @@ if __name__ == "__main__":
         ciphertext = (file.read())
         file.close()
 
-    # Đếm số lần xuất hiện của từng block 16 bits trong mỗi dòng lưu vào dict
+    # count the number of times each 16-bit block appears and save to dict
     dict_cipher = {}
     for i, line in enumerate(ciphertext.split('\n')):
         b_line = binascii.unhexlify(line)
@@ -27,19 +32,22 @@ if __name__ == "__main__":
             else:
                 dict_cipher[i][blockk] = 1
 
-    # In ra block nào xuất hiện nhiều hơn 1 lần
+    # print out which block appears more than once
     for line in dict_cipher:
         for blockk in dict_cipher[line]:
             if dict_cipher[line][blockk] != 1:
                 print(f"line: {line}")
                 print(f"block: {blockk}\ntimes: {dict_cipher[line][blockk]}")
 ```
-Kết quả:
-```
+
+result:
+
+```text
 line: 132
 block: b'\x08d\x9a\xf7\r\xc0oO\xd5\xd2\xd6\x9ctL\xd2\x83'
 times: 4
 ```
-Ở dòng 132, có một block xuất hiện 4 lần => Khả năng cao dòng này được mã hóa với ECB
+
+in line 132, there is a block appearing 4 times => Most likely this line is encrypted with ECB
 
 ## References
