@@ -34,6 +34,8 @@ This is a collection of exercises that demonstrate attacks on real-world crypto.
   - block cipher
   - CBC: Cypher block chaining
 - [challenge11: An ECB/CBC detection oracle](./set2/challenge11/)
+  - how to detect blockcipher mode if we can control the input and observe the output
+  - oracle
 - [challenge12: Byte-at-a-time ECB decryption (Simple)](./set2/challenge12/)
 - [challenge13: ECB cut-and-paste](./set2/challenge13/)
 - [challenge14: Byte-at-a-time ECB decryption (Harder)](./set2/challenge14/)
