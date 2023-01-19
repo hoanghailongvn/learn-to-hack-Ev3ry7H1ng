@@ -5,13 +5,25 @@ This is a collection of exercises that demonstrate attacks on real-world crypto.
 [set1](./set1/):
 
 - [challenge1: Convert hex to base64](./set1/challenge1/)
+  - base64
+  - xxd command
 - [challenge2: Fixed XOR](./set1/challenge2/)
+  - XOR operator
+  - python: binascii.hexlify function
 - [challenge3: Single-byte XOR cipher](./set1/challenge3/)
+  - scoring plaintext function
 - [challenge4: Detect single-character XOR](./set1/challenge4/)
+  - use the challenge 3 function to find the key of a xored ciphertext.
 - [challenge5: Implement repeating-key XOR](./set1/challenge5/)
+  - repeating-key XOR
 - [challenge6: Break repeating-key XOR](./set1/challenge6/)
+  - hamming distance
 - [challenge7: AES in ECB mode](./set1/challenge7/)
+  - block cipher
+  - AES: Advanced Encryption Standard
+  - ECB: Electronic Code Block
 - [challenge8: Detect AES in ECB mode](./set1/challenge8/)
+  - detect ECB mode by counting the number of occurrences of each block
 
 [set2](./set2/):
 
