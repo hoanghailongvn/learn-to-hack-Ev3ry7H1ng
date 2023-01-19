@@ -1,24 +1,42 @@
 # **[set 2 - challenge 9](https://cryptopals.com/sets/2/challenges/9): Implement PKCS#7 padding**
 
-## Padding
-Block cipher thông thường sẽ mã hóa các blocks có kích thước cố định (như 8 bytes hoặc 16 bytes).
+A block cipher transforms a fixed-sized block (usually 8 or 16 bytes) of plaintext into ciphertext. But we almost never want to transform a single block; we encrypt irregularly-sized messages.
 
-Do đó khi message có kích thước bị lẻ (không chia hết cho blocksize) thì cần sử dụng padding, thêm các ký tự khác vào cuối message để tạo thành đủ blocks.
+One way we account for irregularly-sized messages is by padding, creating a plaintext that is an even multiple of the blocksize. The most popular padding scheme is called PKCS#7.
+
+So: pad any block to a specific block length, by appending the number of bytes of padding to the end of the block. For instance,
+
+```text
+"YELLOW SUBMARINE"
+```
+
+... padded to 20 bytes would be:
+
+```text
+"YELLOW SUBMARINE\x04\x04\x04\x04"
+```
+
+## Padding
+
+In a block cipher, when the plaintext size is not divisible by `blocksize`, it is necessary to use padding to add to the end of the plaintext.
 
 ## PKCS#7
-PKCS7 padding hoạt động bằng cách thêm `N` bytes với giá trị N, trong đó N là số bytes cần thiết thêm vào message để hoàn thành block cuối.
 
-Nếu độ dài message đã chia hết cho block thì N = blocksize (chứ không phải bằng 0)
+PKCS7 padding works by adding `N` bytes with the value N, where N is the number of bytes needed to add to the message to complete the last block.
 
-Ví dụ như đề bài đã cho:
+If the plaintext size is already divisible by `blocksize`, then N = `blocksize` (not 0)
 
-message: "YELLOW SUBMARINE"\
-padding lên 20 bytes cần 4 bytes nữa\
+Example:
+
+message length is 16: "YELLOW SUBMARINE"
+
 => "YELLOW SUBMARINE\x04\x04\x04\x04"
 
 ## Challenge
+
 Python code:
-```
+
+```python
 def pkcs7(message: bytes, length: int) -> bytes:
     diff = length - len(message)
     padding = bytes([diff]*diff)
@@ -31,8 +49,11 @@ if __name__ == "__main__":
     message = b"YELLOW SUBMARINE"
     print(pkcs7(message, 20))
 ```
-Kết quả:
-```
+
+result:
+
+```text
 b'YELLOW SUBMARINE\x04\x04\x04\x04'
 ```
+
 ## References

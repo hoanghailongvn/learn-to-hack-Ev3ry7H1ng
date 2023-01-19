@@ -28,6 +28,8 @@ This is a collection of exercises that demonstrate attacks on real-world crypto.
 [set2](./set2/):
 
 - [challenge9: Implement PKCS#7 padding](./set2/challenge9/)
+  - padding in block cipher
+  - PKCS#7
 - [challenge10: Implement CBC mode](./set2/challenge10/)
 - [challenge11: An ECB/CBC detection oracle](./set2/challenge11/)
 - [challenge12: Byte-at-a-time ECB decryption (Simple)](./set2/challenge12/)
