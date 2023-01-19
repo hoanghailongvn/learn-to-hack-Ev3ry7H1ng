@@ -21,7 +21,7 @@ Find reese account and login:
 
 ![search-reese.png](./img/challenge-2-search-reese.png)
 
-But I see anything, try to login to another account but can't login to any other account, only Reese account.
+But I don't see anything, try to login to another account but can't login to any other account, only Reese account.
 
 Try to login to reese account with password of HTB flag pattern then:
 ![password-flag-pattern.png](./img/challenge-2-password-flag-pattern.png)

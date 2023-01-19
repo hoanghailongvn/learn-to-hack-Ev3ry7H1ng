@@ -15,7 +15,7 @@ read source code:
 - Nodejs, express framework: [good express framework tutorial](https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/Introduction)
 - Sqlitedb
 
-Symmary:
+Summary:
 
 - if we can log in with admin account, we can get the flag. The admin account is initialized with a random password.
 - register function has sqli vulnerability but requires client address is 127.0.0.1 otherwise 401
