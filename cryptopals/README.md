@@ -46,6 +46,7 @@ This is a collection of exercises that demonstrate attacks on real-world crypto.
 - [challenge14: Byte-at-a-time ECB decryption (Harder)](./set2/challenge14/)
   - harder version of challenge 12
 - [challenge15: PKCS#7 padding validation](./set2/challenge15/)
+  - PKCS#7 padding validation written in python
 - [challenge16: CBC bitflipping attacks](./set2/challenge16/)
 
 [set3](./set3/):
