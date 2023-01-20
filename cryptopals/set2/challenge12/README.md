@@ -44,7 +44,7 @@ can be considered as this challenge puts us in the case:
 - On the server side, there is an AES-128-ECB encryption function, it works by concatenating input with a secret unknown string, and encrypting that with a consistent, unchanged key.
 - and on the client side, we can control what the input is and observe the ciphertext
 
-Our mission is to exploit to get the secret unknown string appended after your input.
+Our mission is to exploit to get the secret unknown string appended after our input.
 
 To do this, just follow the instructions.
 
