@@ -10,7 +10,7 @@ Same goal: decrypt the target-bytes.
 
 ## Analysis
 
-The difference compared with challenge 12 is that the random-prefix append before your controllable input.
+The difference compared with challenge 12 is that the random-prefix prepend before your controllable input.
 
 To make this no difference to challenge 12, we need to know the length of the prefix and padding so that `prefix + pad` is divisible by blocksize
 
