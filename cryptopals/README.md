@@ -66,6 +66,8 @@ This is a collection of exercises that demonstrate attacks on real-world crypto.
 - [challenge26: CTR bitflipping](./set4//challenge26/)
 - [challenge27: Recover the key from CBC with IV=Key](./set4//challenge27/)
 - [challenge28: Implement a SHA-1 keyed MAC](./set4//challenge28/)
+  - SHA-1
+  - MAC
 - [challenge29: Break a SHA-1 keyed MAC using length extension](./set4//challenge29/)
 - [challenge30: Break an MD4 keyed MAC using length extension](./set4//challenge30/)
 - [challenge31: Implement and break HMAC-SHA1 with an artificial timing leak](./set4//challenge31/)
