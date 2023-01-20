@@ -41,6 +41,8 @@ This is a collection of exercises that demonstrate attacks on real-world crypto.
   - detect ECB mode
   - extracting what is appended after our input to a AES ECB encryption function if the key is consistent and we can observe the output
 - [challenge13: ECB cut-and-paste](./set2/challenge13/)
+  - exploit the inherent weakness of ECB mode: two identical plaintext - two identical ciphertext
+  - fake cookie
 - [challenge14: Byte-at-a-time ECB decryption (Harder)](./set2/challenge14/)
 - [challenge15: PKCS#7 padding validation](./set2/challenge15/)
 - [challenge16: CBC bitflipping attacks](./set2/challenge16/)

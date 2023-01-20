@@ -1,49 +1,87 @@
 # **[set 2 - challenge 13](https://cryptopals.com/sets/2/challenges/13): ECB cut-and-paste**
 
-## Đề bài
+Write a k=v parsing routine, as if for a structured cookie. The routine should take:
 
-Các bước trong đề bài giống như là các thao tác của server với cookies:
-- 1. đọc email của user
-- 2. tạo một đoạn cookie như là: `email=foo@bar.com&uid=10&role=user`
-- 3. encrypt đoạn cookie này và gửi cho người dùng
-- 4. mỗi khi user quay trở lại, server đọc đoạn encrypted cookie để xác định người dùng
+```url
+foo=bar&baz=qux&zap=zazzle
+```
 
-Trong đó:
-- có hai hàm chuyển đổi qua lại giữa cookie dạng string:
-    ```
-    email=foo@bar.com&uid=10&role=user
-    ```
-    và dạng dict
-    ```
-    {
-    'email': foo@bar.com,
-    'uid': 10
-    'role: 'user'
-    }
-    ```
-- hàm profile_for() nhận vào email và chuyển thành cookie dạng string, email không được có ký tự nguy hiểm '&' và '=' để không bị parse sai
-- hàm encrypt và decrypt bằng aes ecb
+... and produce:
 
-## Mục tiêu
-Tự tạo ra encrypted cookie mà khi server đọc được sẽ tạo ra profile có quyền `admin`
+```map
+{
+  foo: 'bar',
+  baz: 'qux',
+  zap: 'zazzle'
+}
+```
 
-## Các hàm cần thiết
-- cookie2dict: phân tích cookie 
-    - lambda tạo ra anonymous functions: đọc thêm [tại đây](https://julien.danjou.info/python-functional-programming-lambda/)
-    - map() thực thi hàm lambda với từng item. Ví dụ như đoạn code dưới đây, từng item của `s.strip('&').split('&')` sẽ được pass vào `lambda x: x.split('=')`
-    ```
+(you know, the object; I don't care if you convert it to JSON).
+
+Now write a function that encodes a user profile in that format, given an email address. You should have something like:
+
+```python
+profile_for("foo@bar.com")
+```
+
+... and it should produce:
+
+```map
+{
+  email: 'foo@bar.com',
+  uid: 10,
+  role: 'user'
+}
+```
+
+... encoded as:
+
+```url
+email=foo@bar.com&uid=10&role=user
+```
+
+Your "profile_for" function should not allow encoding metacharacters (& and =). Eat them, quote them, whatever you want to do, but don't let people set their email address to "foo@bar.com&role=admin".
+
+Now, two more easy functions. Generate a random AES key, then:
+
+A. Encrypt the encoded user profile under the key; "provide" that to the "attacker".
+B. Decrypt the encoded user profile and parse it.
+Using only the user input to profile_for() (as an oracle to generate "valid" ciphertexts) and the ciphertexts themselves, make a role=admin profile.
+
+## Analysis
+
+The above operations are similar to how a server manages and manipulates user cookies:
+
+1. the first time the client connects to the server, send an email address
+2. server generate cookie: `email=foo@bar.com&uid=10&role=user`
+3. server encrypt this cookie string and send it back to the client
+4. every time the client comes back, it sends that encrypted cookie with every request. Depends on that, the server can authenticate the client
+
+Our mission is login to server as admin
+
+## server function
+
+- cookie2dict: extract cookie to dict
+  - lambda generate anonymous functions: [document](https://julien.danjou.info/python-functional-programming-lambda/)
+  - map() execute lambda function with each item.
+
+    ```python
     def cookie2dict(s: str) -> dict:
         return dict(map(lambda x: x.split('='), s.strip('&').split('&')))
     ```
-- dict2cookie: 
-    ```
+
+- dict2cookie:
+
+    ```python
     def dict2cookie(d: dict) -> str:
         return '&'.join(map('='.join, d.items()))
     ```
+
 - profile_for:
-    - 1. produce dict
-    - 2. from dict encode to cookie
-    ```
+  - 1. generate dict
+  - 2. from dict encode to cookie
+
+    ```python
     def profile_for(email: str):
         return dict2cookie({
             'email': email.replace('&', '').replace('=', ''),
@@ -51,8 +89,10 @@ Tự tạo ra encrypted cookie mà khi server đọc được sẽ tạo ra prof
             'role': 'user'
         })
     ```
+
 - encrypt:
-    ```
+
+    ```python
     def AES_encrypt(encoded_cookie):
         cryptor = AES.new(consistent_but_unknown_key, AES.MODE_ECB)
         ciphertext = cryptor.encrypt(pkcs7(encoded_cookie, blocksize))
@@ -60,7 +100,8 @@ Tự tạo ra encrypted cookie mà khi server đọc được sẽ tạo ra prof
     ```
 
 - decrypt:
-    ```
+
+    ```python
     def AES_decrypt_and_parse(encrypted_cookie: bytes) -> dict:
         cryptor = AES.new(consistent_but_unknown_key, AES.MODE_ECB)
         encoded_cookie = pkcs7_unpadding(cryptor.decrypt(encrypted_cookie))
@@ -68,70 +109,76 @@ Tự tạo ra encrypted cookie mà khi server đọc được sẽ tạo ra prof
         return cookie2dict(encoded_cookie.decode())
     ```
 
-- recv_encrypted_cookie_for:
-    - Ghép từng bước lại từ khi nhận được email từ người dùng đến khi trả về encrypted cookie:
-        - 1. tạo profile dạng dict cho email
-        - 2. từ profile dạng dict phân tích thành cookie
-        - 3. mã hóa cookie bằng AES và gửi cho người dùng
-    ```
+- put it all together, we have recv_encrypted_cookie_for function on the server-side:
+
+    ```python
     def recv_encrypted_cookie_for(email: str) -> bytes:
         cookie = profile_for(email)
         encrypted_cookie = AES_encrypt(bytes(cookie, 'ascii'))
         return encrypted_cookie
     ```
 
-## Trước khi bắt đầu
-Những gì ta đã biết:
-- cookies được mã hóa bằng aes ebc
-- key cố định
-- được pad bằng pkcs7
-- blocksize là 16
-- cookie trước khi encrypt có dạng: 'email=our@email.com&uid=10&role=user'
+## Analysis phase 2
 
-## Ý tưởng
-Vẫn lỗi bảo mật cơ bản với ECB, tuy không biết key nhưng ta vẫn có thể có được ciphertext block tương ứng với plaintext block.
+What do we, the attackers, know:
 
-Hàm encrypt sẽ nhận vào plaintext cookie: 'email=|attacker_controlled|&uid=10&role=user'. Trong đó:
-- attacker_controlled là vị trí người dùng có thể đưa nội dung vào. (và cả attakcer)
+- cookies is encrypted by aes ebc
+- consistent key
+- padding: pkcs7
+- blocksize: 16
+- cookie before encrypting format: 'email=our@email.com&uid=10&role=user'
 
-Các bước:
-- 1. phân tích plaintext cookie thành từng block 16 ký tự
-- 2. thay đổi `attacker_controlled` hợp lý sao cho khi đổi chỗ các block trong cookie, có thể xuất hiện string 'role=admin'
-- 3. lấy ciphertext mà server gửi về, đảo vị trí các block sao cho xuất hiện 'role=admin' tương ứng với plaintext
+## Idea
+
+still that security issue of ECB mode, two identical plaintext blocks - two identical ciphertext blocks. We don't know the key, but we know which ciphertext corresponds to which plaintext.
+
+`attacker_controllable` position is position that we can inject our input to the encrypt function:
+
+```url
+'email=|attacker_controllable|&uid=10&role=user'
+```
+
+idea: choose an `attacker_controllable` so that when we receive the encrypted cookies, we swap blocks and send them back to the server, server decrypts that, and the string `role=admin` appear.
 
 ## Solution
-Nếu ta nhập vào email = 'aaaaaaaaaa' + 'admin' + '\x0b'*0x0b + 'aaa', plaintext có thể được phân tích như sau
-```
-block1 = 'email=aaaaaaaaaa'
-block2 = 'admin' + '\x0b'*0x0b
-block3 = 'aaa&uid=10&role=
-block4 = 'user' + '\x0c'*0x0c
-```
-Trong đó:
-- '\x0b'*0x0b ở block 2: là padding pkcs7 attacker tạo thủ công. Để khi chuyển block 2 xuống dưới cùng thì padding vẫn hợp lệ
-- '\x0c'*0x0c ở block 4: là padding được pkcs7 server thêm vào
 
-Mục đích ta muốn có các block như này là để khi đổi chỗ block 2 với block 4, plaintext tương ứng sẽ là:
+input:
+
+```text
+'aaaaaaaaaa' + 'admin' + '\x0b'*0x0b + 'aaa':
 ```
+
+cookie generated by server:
+
+```text
+block1 = 'email=aaaaaaaaaa'
+block2 = 'admin' + '\x0b'*0x0b
+block3 = 'aaa&uid=10&role=
+block4 = 'user' + '\x0c'*0x0c
+```
+
+- '\x0b'*0x0b in block 2: is padding pkcs7 manually created by attacker
+- '\x0c'*0x0c ở block 4: is padding pkcs7 generated by server
+
+If we swap block 2 and block 4:
+
+```text
 block1 = 'email=aaaaaaaaaa'
 block4 = 'user' + '\x0c'*0x0c
 block3 = 'aaa&uid=10&role=
 block2 = 'admin' + '\x0b'*0x0b
 ```
-- xuất hiện role=admin
-- padding pkcs7 hợp lệ
+
+- `role=admin` appear
+- valid padding pkcs7
 
 Python code:
-- gửi email = 'aaaaaaaaaa' + 'admin' + '\x0b'*0x0b + 'aaa' cho server
-- nhận về encrypted cookie
-- đảo block2 với block4
-- server đọc cookie này sẽ tạo ra profile có role=admin
-```
+
+```python
 def crack():
     email = 'aaaaaaaaaa' + 'admin' + '\x0b'*0x0b + 'aaa'
 
     encrypted_cookie = recv_encrypted_cookie_for(email)
-    # Chia encrypted_cookie thành các block 16 bytes rồi cho vào list
     encrypted_cookie_block16 = [encrypted_cookie[i:i+blocksize] for i in range(0, len(encrypted_cookie), blocksize)]
 
     fake_encrypted_cookie = encrypted_cookie_block16[0] + encrypted_cookie_block16[3] + \
@@ -140,12 +187,16 @@ def crack():
     profile = AES_decrypt_and_parse(fake_encrypted_cookie)
     print(profile)
 ```
-Kết quả:
-```
+
+result:
+
+```python
 {'email': 'aaaaaaaaaauser\x0c\x0c\x0c\x0c\x0c\x0c\x0c\x0c\x0c\x0c\x0c\x0caaa', 'uid': '10', 'role': 'admin'}
 ```
+
 Source code: [here](./challenge13.py)
 
 ## References
-- lambda: https://julien.danjou.info/python-functional-programming-lambda/
-- map(): https://www.w3schools.com/python/ref_func_map.asp
+
+- lambda: <https://julien.danjou.info/python-functional-programming-lambda/>
+- map(): <https://www.w3schools.com/python/ref_func_map.asp>
