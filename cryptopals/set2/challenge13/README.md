@@ -132,13 +132,13 @@ What do we, the attackers, know:
 
 still that security issue of ECB mode, two identical plaintext blocks - two identical ciphertext blocks. We don't know the key, but we know which ciphertext corresponds to which plaintext.
 
-`attacker_controllable` position is position that we can inject our input to the encrypt function:
+`attacker-controlled` position is position that we can inject our input to the encrypt function:
 
 ```url
-'email=|attacker_controllable|&uid=10&role=user'
+'email=|attacker-controlled|&uid=10&role=user'
 ```
 
-idea: choose an `attacker_controllable` so that when we receive the encrypted cookies, we swap blocks and send them back to the server, server decrypts that, and the string `role=admin` appear.
+idea: choose an `attacker-controlled` so that when we receive the encrypted cookies, we swap blocks and send them back to the server, server decrypts that, and the string `role=admin` appear.
 
 ## Solution
 
