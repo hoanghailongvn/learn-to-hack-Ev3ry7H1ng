@@ -1,18 +1,58 @@
 # **[set 2 - challenge 12](https://cryptopals.com/sets/2/challenges/12): Byte-at-a-time ECB decryption (Simple)**
 
-## Đề bài
-Viết hàm mã hóa AES128 mode ECB:
+Copy your oracle function to a new function that encrypts buffers under ECB mode using a consistent but unknown key (for instance, assign a single random key, once, to a global variable).
 
-AES-128-ECB(attacker-controlled || target-bytes, random-key)
+Now take that same function and have it append to the plaintext, BEFORE ENCRYPTING, the following string:
 
-Trong đó:
-- attacker-controlled: phần plaintext mình thích làm gì thì làm
-- target-bytes: mục tiêu cần tìm
-- random-key: consistent_but_unknown_key
-
-## Hàm oracle AES
-- python code:
+```hexa
+Um9sbGluJyBpbiBteSA1LjAKV2l0aCBteSByYWctdG9wIGRvd24gc28gbXkg
+aGFpciBjYW4gYmxvdwpUaGUgZ2lybGllcyBvbiBzdGFuZGJ5IHdhdmluZyBq
+dXN0IHRvIHNheSBoaQpEaWQgeW91IHN0b3A/IE5vLCBJIGp1c3QgZHJvdmUg
+YnkK
 ```
+
+Spoiler alert.
+
+```text
+Do not decode this string now. Don't do it.
+```
+
+Base64 decode the string before appending it. Do not base64 decode the string by hand; make your code do it. The point is that you don't know its contents.
+
+What you have now is a function that produces:
+
+```code
+AES-128-ECB(your-string || unknown-string, random-key)
+```
+
+It turns out: you can decrypt "unknown-string" with repeated calls to the oracle function!
+
+Here's roughly how:
+
+1. Feed identical bytes of your-string to the function 1 at a time --- start with 1 byte ("A"), then "AA", then "AAA" and so on. Discover the block size of the cipher. You know it, but do this step anyway.
+2. Detect that the function is using ECB. You already know, but do this step anyways.
+3. Knowing the block size, craft an input block that is exactly 1 byte short (for instance, if the block size is 8 bytes, make "AAAAAAA"). Think about what the oracle function is going to put in that last byte position.
+4. Make a dictionary of every possible last byte by feeding different strings to the oracle; for instance, "AAAAAAAA", "AAAAAAAB", "AAAAAAAC", remembering the first block of each invocation.
+5. Match the output of the one-byte-short input to one of the entries in your dictionary. You've now discovered the first byte of unknown-string.
+Repeat for the next byte.
+
+## Analysis
+
+can be considered as this challenge puts us in the case:
+
+- let's say we are the client, and the other side is the server
+- On the server side, there is an AES-128-ECB encryption function, it works by concatenating input with a secret unknown string, and encrypting that with a consistent, unchanged key.
+- and on the client side, we can control what the input is and observe the ciphertext
+
+Our mission is to exploit to get the secret unknown string appended after your input.
+
+To do this, just follow the instructions.
+
+## oracle function AES
+
+- python code:
+
+```python
 import base64
 from random import randint
 from Crypto.Cipher import AES
@@ -44,35 +84,36 @@ def AES_encrypt_ECB_mode(attacker_controlled: bytes):
     return ciphertext
 ```
 
-## Mục tiêu
-Tìm được nội dung `target-bytes`.
-
 ## Solution
-Làm theo từng bước được hướng dẫn là ra:
 
-- B1: Tìm blocksize
-    - tạo attacker_controlled có độ dài tăng dần
-    - Khi nào mà các bytes đầu tiên bắt đầu cố định không thay đổi nữa, thì ta đã tìm được blocksize
-    - python code:
-        - Khi mà 2 bytes đầu không thay đổi nữa thì tìm được blocksize
-    ```
+follow the instructions:
+
+- Step 1: Find blocksize
+  - generate `attacker_controlled` with increasing length
+  - observe the output, when some bytes at the beginning do not change after increasing the input length, it means that the length of the block does not change is the blocksize
+  - python code:
+
+    ```python
     def find_blocksize():
         prev_first_two_bytes = AES_encrypt_ECB_mode(b'a')[:2]
+
+        # `attacker_controlled` with increasing length
         for i in range(2, 100):
             first_two_bytes = AES_encrypt_ECB_mode(bytes('a'*i, 'ascii'))[:2]
+            # check if the first two bytes of ciphertext don't change after increasing attacker_controlled length
             if prev_first_two_bytes == first_two_bytes:
                 return i - 1
             else:
                 prev_first_two_bytes = first_two_bytes
     ```
-    - Kết quả: blocksize = 16
-    ```
-    16
-    ```
-- B2: Kiểm tra xem có đang dùng ECB mode hay không
-    - với blocksize = 16, thử nhập bytes có 32 items giống nhau. So sánh block đầu và block 2.
-    - python code:
-    ```
+
+  - result: blocksize = 16
+
+- Step 2: check what block cipher mode is being used
+  - with blocksize = 16, try entering input with 32 identical characters. Compare block 1 and block 2, if its equal, it means that ECB mode is being used.
+  - python code:
+
+    ```python
     def is_ecb(blocksize: int = 16):
         attacker_controlled = bytes('a'*32, 'ascii')
         ciphertext = AES_encrypt_ECB_mode(attacker_controlled)
@@ -81,18 +122,16 @@ Làm theo từng bước được hướng dẫn là ra:
         else:
             return False
     ```
-    - Kết quả:
-    ```
-    True
-    ```
-- B3: 
-    - Tạo attacker_controlled có block cuối có kích thước nhỏ hơn 1 bytes so với blocksize, ví dụ 'a'*15:
-    - Mà ngay sau attacker_controlled thì chính là `target-bytes` => block cuối sẽ thành 'a'*15 + `ký tự đầu tiên của target-bytes`
-- B4 + B5:
-    - Do chỉ có một ký tự nên ta có thể dùng brute-force, thử thay tất cả các ký tự vào bytes cuối.
-    - Nếu block ciphertext trùng => tìm được `ký tự đầu tiên của target-bytes`
-    - python code:
-    ```
+
+  - result: True
+
+- Step 3: find the first character of secret unknown string
+  - craft an input `attacker_controlled` that the size is exactly 1 byte short, ex 'a'*15:
+  - our input is concatenated with secret unknown string so the first character of `unknown secret string` will be filled in the missing byte
+  - we have the `AES-128-ECB(attacker_controlled || first character of unknown-string, random-key)` ciphertext block. now we can try bruteforce to know what the first character is.
+  - python code:
+
+    ```python
     def crack():
         # b'0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~ \t\n\r\x0b\x0c'
         b_printable = string.printable
@@ -109,29 +148,24 @@ Làm theo từng bước được hướng dẫn là ra:
         
         print(target_bytes)
     ```
-    - Kết quả: ký tự đầu tiên của `target-bytes` là 'R':
-    ```
-    R
-    ```
-- B6: Tương tự, tìm dần dần từng byte của `target-bytes`
-    - Tìm len của `target-bytes` (đã padding): 144
-    ```
+
+  - Result: the first character of `secret` is `R`:
+
+- Step ...: Similarly, find the letter by letter of the `secret`
+  - find the length of `secret` (padded): 144
+
+    ```python
     ciphertext = AES_encrypt_ECB_mode(b'')
     print(len(ciphertext))
     ```
-    - Thay vì dùng attacker_controlled chỉ có độ dài 1 block như bước 5, ta dùng attacker_controlled có độ dài 144 để khi giảm dần về 0, có thể trượt dần `target-bytes` đi qua block trong khoảng [124:144]
-    - Muốn tìm kí tự đầu tiên:
-        - attacker_controlled: 'a'*143
-        - brute_force_attacker_controlled = attacker_controlled + {prinable character}
-        - so sánh ciphertext do attacker_controlled tạo ra và ciphertext do brute_force_attacker_controlled tạo ra ở vị trí [124:144]
-        - => tìm được ký tự đầu tiên
-    - Muốn tìm kí tự thứ hai:
-        - attacker_controlled: 'a'*142
-        - brute_force_attacker_controlled = attacker_controlled + `target-bytes đã tìm được` + {prinable character}
-        - so sánh 2 ciphertext ở vị trí như cũ
-        - => tìm được ký tự thứ hai
-    - Tương tự ta sẽ tìm được hết `target-bytes`
-    ```
+
+  - if we only use the input of length 1 blocksize, we can only extract 1 blocksize of characters of secret. so with a length of 144 of secret, our input must be the same size as secret, now we bruteforce at position 144
+  - after finding the first character, we go find the second character:
+    - `attacker_controlled`: 'a'*142
+    - brute_force_attacker_controlled = attacker_controlled + `the first letter of the secret has been found` + {prinable character}
+  - similarly we will get all the characters of `secret`
+
+    ```python
     def crack():
         # b'0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~ \t\n\r\x0b\x0c'
         printable = string.printable
@@ -151,14 +185,17 @@ Làm theo từng bước được hướng dẫn là ra:
                     break
         return target_bytes
     ```
-    Kết quả:
-    ```
+
+    Result:
+
+    ```text
     Rollin' in my 5.0
     With my rag-top down so my hair can blow
     The girlies on standby waving just to say hi
     Did you stop? No, I just drove by
 
     ```
+
     Source code: [link](./challenge12.py)
 
 ## References

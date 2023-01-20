@@ -32,6 +32,7 @@ def AES_encrypt_ECB_mode(attacker_controlled: bytes):
 
 def find_blocksize():
     prev_first_two_bytes = AES_encrypt_ECB_mode(b'a')[:2]
+    # `attacker_controlled` with increasing length
     for i in range(2, 100):
         first_two_bytes = AES_encrypt_ECB_mode(bytes('a'*i, 'ascii'))[:2]
         if prev_first_two_bytes == first_two_bytes:
