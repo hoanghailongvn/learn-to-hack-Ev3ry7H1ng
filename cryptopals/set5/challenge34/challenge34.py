@@ -145,7 +145,7 @@ def simulate_mitm():
 
     message = alice.send()
 
-    # mitm attacker khi đã biết s cả hai bên đều là 0:
+    # mitm attacker know that `s` in both sides are 0:
     ct, iv = message
     pt = aes_cbc_decrypt(sha1(bytes(256))[:16], iv, ct)
     print(f"mitm: {pt}")
