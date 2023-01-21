@@ -145,15 +145,15 @@ class SHA1:
         for i in range(len(self.__H)):
             self.__H[i] = int.from_bytes(hash_value[i*4 : (i+1)*4], byteorder='big')
 
-        # sử dụng hàm __padding có sẵn để lấy độ dài của message cũ
+        # get the message's length after padded
         previous_length = len(SHA1.__padding('a'*message_length))
 
-        # sử dụng hàm __padding để padding new_text, thay 8 bytes ở cuối thành độ dài mới
+        # padding new_text, length of new message written to last 8 bytes
         stream = SHA1.__padding(new_text)
         stream = stream[0: -8] + struct.pack(">Q", (previous_length + len(new_text))*8)
         stream = SHA1.__prepare(stream)
 
-        # tiếp tục xử lý từng block mới
+        # continue process the new block
         for block in stream:
             self.__process_block(block)
 
