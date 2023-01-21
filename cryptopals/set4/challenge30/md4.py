@@ -156,15 +156,15 @@ class MD4:
 
 
     def length_extension_attack(self, hash_value: bytes, message_length: int, new_text: bytes):
-        # break hash_value into h0, h1, ..., h4
+        # break hash_value into A, B, C, D
         for i in range(len(self.h)):
             self.h[i] = int.from_bytes(hash_value[i*4 : (i+1)*4], byteorder='little')
 
-        # sử dụng hàm __padding có sẵn để lấy độ dài của message cũ
+        # get the length of original message after padded
         previous_length = len(MD4.__padding(b'a'*message_length))
 
-        # sử dụng hàm __padding để padding new_text, thay 8 bytes ở cuối thành độ dài mới
-        # Khác với SHA1 ở "<Q" nghĩa là little endian
+        # padding new_text, length of new message written to last 8 bytes
+        # "<Q": little endian
         stream = MD4.__padding(new_text)
         stream = stream[0: -8] + struct.pack("<Q", (previous_length + len(new_text))*8)
 
