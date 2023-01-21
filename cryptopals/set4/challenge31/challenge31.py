@@ -47,7 +47,7 @@ def insecure_compare(file: str, signature: str):
 def attack():
     found = b""
 
-    # brute force từng byte của signature
+    # brute force each byte of signature
     for i in range(20):
         max_time = -inf
 

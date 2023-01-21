@@ -69,8 +69,12 @@ This is a collection of exercises that demonstrate attacks on real-world crypto.
   - SHA-1
   - MAC
 - [challenge29: Break a SHA-1 keyed MAC using length extension](./set4//challenge29/)
+  - SHA-1 keyd MAC length extension attack
 - [challenge30: Break an MD4 keyed MAC using length extension](./set4//challenge30/)
+  - MD4 keyd MAC length extension attack
 - [challenge31: Implement and break HMAC-SHA1 with an artificial timing leak](./set4//challenge31/)
+  - HMAC-SHA1
+  - timing leak attack
 - [challenge32: Break HMAC-SHA1 with a slightly less artificial timing leak](./set4//challenge32/)
 
 [set5](./set5/):

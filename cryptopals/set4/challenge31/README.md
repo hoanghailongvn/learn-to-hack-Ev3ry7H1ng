@@ -1,12 +1,38 @@
 # **[set 4 - challenge 31](https://cryptopals.com/sets/4/challenges/31): Implement and break HMAC-SHA1 with an artificial timing leak**
 
-# HMAC
-HMAC là một loại đặc biệt của MAC, giúp chống lại tấn công length extension như đã khai thác ở challenge 29 + 30.
+The psuedocode on Wikipedia should be enough. HMAC is very easy.
 
-Pseudocode xem tại [đây](https://en.wikipedia.org/wiki/HMAC#Implementation)
+Using the web framework of your choosing (Sinatra, web.py, whatever), write a tiny application that has a URL that takes a "file" argument and a "signature" argument, like so:
+
+```url
+http://localhost:9000/test?file=foo&signature=46b4ec586117154dacd49d664e5d63fdc88efb51
+```
+
+Have the server generate an HMAC key, and then verify that the "signature" on incoming requests is valid for "file", using the "==" operator to compare the valid MAC for a file with the "signature" parameter (in other words, verify the HMAC the way any normal programmer would verify it).
+
+Write a function, call it "insecure_compare", that implements the == operation by doing byte-at-a-time comparisons with early exit (ie, return false at the first non-matching byte).
+
+In the loop for "insecure_compare", add a 50ms sleep (sleep 50ms after each byte).
+
+Use your "insecure_compare" function to verify the HMACs on incoming requests, and test that the whole contraption works. Return a 500 if the MAC is invalid, and a 200 if it's OK.
+
+Using the timing leak in this application, write a program that discovers the valid MAC for any file.
+
+Why artificial delays?
+
+```text
+Early-exit string compares are probably the most common source of cryptographic timing leaks, but they aren't especially easy to exploit. In fact, many timing leaks (for instance, any in C, C++, Ruby, or Python) probably aren't exploitable over a wide-area network at all. To play with attacking real-world timing leaks, you have to start writing low-level timing code. We're keeping things cryptographic in these challenges.
+```
+
+## HMAC
+
+HMAC is a special type of MAC that protects against length extension attacks as exploited in challenge 29 + 30.
+
+Pseudocode [here](https://en.wikipedia.org/wiki/HMAC#Implementation)
 
 python code:
-```
+
+```python
 import hashlib
 
 def bxor(b1: bytes, b2: bytes) -> bytes: # use xor for bytes
@@ -35,12 +61,16 @@ def hmac_sha1(message: bytes, key: bytes) -> bytes:
 ```
 
 ## Timing attack
+
 [Wikipedia](https://en.wikipedia.org/wiki/Timing_attack): Every logical operation in a computer takes time to execute, and the time can differ based on the input; with precise measurements of the time for each operation, an attacker can work backwards to the input.
 
-Ví dụ trong challenge 31 + 32, hàm insecure_compare() nhận vào 2 string, so sánh lần lượt từng byte từ trái sang phải, suy ra thời gian thực thi khi có bytes khác biệt ở đâu sẽ ngắn hơn.
-## Challenge 31
-Để đơn giản, ta chỉ cần viết hàm insecure_compare() là đủ rồi
-```
+in the challenge 31 + 32, insecure_compare() functiontakes 2 strings, compares each byte from left to right, time to compare is quite substantialsuy (50ms each byte). depends on server response time delay, attacker can use bruteforce technique to find the secret
+
+## implement server-side code
+
+insecure_compare():
+
+```python
 # Server side
 def random_bytes(length: int) -> bytes:
     ret = []
@@ -67,12 +97,15 @@ def insecure_compare(file: str, signature: str):
     return "200"
 ```
 
-Ta bruteforce từng ký tự của signature từ trái sang phải, ký tự nào làm cho hàm insecure_compare có thời gian thực thi lâu nhất thì chính là ký tự đúng:
-```
+## Attack
+
+bruteforce:
+
+```python
 def attack():
     found = b""
 
-    # brute force từng byte của signature
+    # brute force each byte of signature
     for i in range(20):
         max_time = -inf
 
@@ -91,8 +124,9 @@ def attack():
         print(found.hex())
 ```
 
-Kết quả:
-```
+result:
+
+```text
 expected hash: 50a90948db290cc9c63991e4ffc562cfeaf98624
 50
 50a9
@@ -109,13 +143,14 @@ Traceback (most recent call last):
     sleep(50/1000)
 KeyboardInterrupt
 ```
-Ta có thể thấy hàm attack() đã hoạt động thành công, nên ta dừng chương trình tại đây vì thời gian chạy lâu:
 
-Tổng thời gian chạy là: 20 * 256 * 20 * 50 = 5120000 (ms) = 1.42222222 (hours):
-- 20: tổng số vị trí cần bruteforce
-- 256: 1 bytes = 256 
-- 20: mỗi lần bruteforce, so sánh nhiều nhất cả 20 bytes
-- 50: thời gian mỗi lần so sánh
+I interrupt the program because we can see it is working fine, and to get the result, we need: 20 \* 256 \* 20 \* 50 = 5120000 (ms) = 1.42222222 (hours):
+
+- 20: bruteforce positions
+- 256: 1 bytes = 256 case
+- 20: worst case 20 bytes
+- 50: server compare time
 
 ## References
-Timing attack: https://en.wikipedia.org/wiki/Timing_attack
+
+Timing attack: <https://en.wikipedia.org/wiki/Timing_attack>
