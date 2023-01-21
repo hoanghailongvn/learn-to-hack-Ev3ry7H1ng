@@ -1,9 +1,14 @@
 # **[set 4 - challenge 32](https://cryptopals.com/sets/4/challenges/32): Break HMAC-SHA1 with a slightly less artificial timing leak**
 
-Giống với challenge32, nhưng giảm thời gian sleep() của mỗi lần so sánh từ 50ms xuống còn 5ms.
+Reduce the sleep in your "insecure_compare" until your previous solution breaks. (Try 5ms to start.)
 
-Khi thử với thuật toán cũ, ta có thể thấy kết tìm được sai về cuối:
-```
+Now break it again.
+
+## Analysis
+
+try using the attack function written in challenge 31:
+
+```text
 expected hash: 80a43dcaa022c40978f0ec3314136d87cee30c04
 80
 80a4
@@ -15,27 +20,39 @@ expected hash: 80a43dcaa022c40978f0ec3314136d87cee30c04
 80a43dcaa022c409
 80a43dcaa022c40978
 80a43dcaa022c40978f0
-80a43dcaa022c40978f0ac   <----------- sai từ đây
+80a43dcaa022c40978f0ac   <----------- wrong
 80a43dcaa022c40978f0ac73
 ```
-Do thời gian thực thi mỗi lần so sánh không chính xác là 5ms, do một số yếu tố khác nên thời gian thực thi, phản hồi, sẽ xấp xỉ 5ms. Khi càng về các bytes cuối, sự xấp xỉ này sẽ cộng dồn lại với nhau khá đáng kể nên dễ bị sai.
 
-Ta có thể bruteforce nhiều byte một lần, nhưng làm cách này sẽ tăng thời gian lên rất nhiều, ví dụ chỉ với 2 bytes một lần, thời gian sẽ là: 20 * 256 * 256 * 20 * 5 (ms) = 1.51703704 days:
-- 20: tổng số vị trí cần bruteforce
-- 256 * 256: 2 bytes một lần
-- 20: mỗi lần bruteforce, so sánh nhiều nhất cả 20 bytes
-- 5: thời gian mỗi lần so sánh
+Since the execution time for each comparison is not exactly 5ms, due to some other factors the execution time, the response will be approximately 5ms. When these approximations are put together, they will be quite significant and prone to error.
 
-Cách hai: ta làm nổi bật 5ms lên, bằng cách không chỉ dựa vào kết quả một lần chạy, mà tổng của nhiều lần chạy với nhau, như thế độ chính xác sẽ cao hơn:
-```
+we need to find some way to make the delay as significant as challenge 31
+
+Solution 1:
+
+bruteforce two bytes at a time
+
+- time difference between true and false comparison: 5ms -> 10ms
+- total time to attack: 20 *256* 256 *20* 5 (ms) = 1.51703704 days
+
+=> too slow and can still fail, 5ms -> 10ms is not enough
+
+Solution 2: repeat 10 times and sumup total delay
+
+- 5ms -> 50ms
+- total time to attack: same as challenge 31
+
+this solution is ok (i think)
+
+```python
 def attack():
     found = b""
 
-    # brute force từng byte của signature
+    # brute force each byte of signature
     for i in range(20):
         # brute force
         history = [0]*256 
-        for _ in range(10):   # <---------------------------------
+        for _ in range(10):   # <--------------------------------- difference here
             for j in range(256):
                 bruteforce_signature = found[:i] + bytes([j]) + b"\x00" * (20 - i - 1)
 
@@ -51,8 +68,10 @@ def attack():
         
         print(found.hex())
 ```
-Trong đó, có thêm một vòng lặp 10 lần. Kết quả:
-```
+
+result:
+
+```text
 expected hash: fb6edb9c1f22c37310e348da16ec42661cb58d68
 fb
 fb6e
