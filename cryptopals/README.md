@@ -76,6 +76,7 @@ This is a collection of exercises that demonstrate attacks on real-world crypto.
   - HMAC-SHA1
   - timing leak attack
 - [challenge32: Break HMAC-SHA1 with a slightly less artificial timing leak](./set4//challenge32/)
+  - harder version of challenge 31
 
 [set5](./set5/):
 
