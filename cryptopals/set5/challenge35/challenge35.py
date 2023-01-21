@@ -143,7 +143,7 @@ def simulate_mitm():
     B_ = bob.recv_p_g_A(fake_p_g_A)
     alice.recv_B(B_)
 
-    # => s bên A là 1
+    # => A-side: s = 1
     message = alice.send()
 
     # mitm

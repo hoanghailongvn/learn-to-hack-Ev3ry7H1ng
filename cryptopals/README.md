@@ -84,8 +84,12 @@ This is a collection of exercises that demonstrate attacks on real-world crypto.
   - Diffie-Hellman
   - Implement in python
 - [challenge34: Implement a MITM key-fixing attack on Diffie-Hellman with parameter injection](./set5/challenge34/)
-  - mitm: fake A and B to p
+  - mitm: change A and B to p
 - [challenge35: Implement DH with negotiated groups, and break with malicious "g" parameters](./set5/challenge35/)
+  - mitm: change g to:
+    - 1
+    - p
+    - p - 1
 - [challenge36: Implement Secure Remote Password (SRP)](./set5/challenge36/)
 - [challenge37: Break SRP with a zero key](./set5/challenge37/)
 - [challenge38: Offline dictionary attack on simplified SRP](./set5/challenge38/)
