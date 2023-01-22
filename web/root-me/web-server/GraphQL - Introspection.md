@@ -76,7 +76,7 @@ follow the instructions in the introspection document
 - we got "n" character with `id:1`, let's use burp's intruder to get all the data:
 
   ![7.png](./image/GraphQL%20-%20Introspection%207.png)
-  - the flag at `id:17`: 
+  - the flag at `id:17`:
     - `RM{1ntr0sp3ct1On_1s_us3ful}`
 
 ## References
