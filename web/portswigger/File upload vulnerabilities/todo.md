@@ -1,1 +1,0 @@
-tiếp tục ở Race conditions in URL-based file uploads, do hết lab nên chưa làm tiếp, còn đoạn nữa.
