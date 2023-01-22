@@ -12,6 +12,7 @@
   - [6. JWT authentication bypass via kid header path traversal](./lab/6.%20JWT%20authentication%20bypass%20via%20kid%20header%20path%20traversal.md)
 - expert:
   - [7. JWT authentication bypass via algorithm confusion](./lab/7.%20JWT%20authentication%20bypass%20via%20algorithm%20confusion.md)
+  - [8. JWT authentication bypass via algorithm confusion with no exposed key](./lab/8.%20JWT%20authentication%20bypass%20via%20algorithm%20confusion%20with%20no%20exposed%20key.md)
 
 ## Detect JWT
 
@@ -117,11 +118,25 @@ use burpsuite's extension called jwt editor, in HTTP history, any request that c
     - send
 
 7. algorithm confusion with exposed key:
-    - check `/jwks.json` or `/.well-known/jwks.json`
+    - get public rsa key from `/jwks.json` or `/.well-known/jwks.json`
+    - generate new rsa key, paste the JWK obtained from server, save.
+    - select copy public key as pem
+    - then base64 encode
+    - generate new symmetric key, replace "k" with base64 encoded value
+    - edit jwt's body
+    - change "alg" from RS256 to HS256
+    - sign with symmetric key
+    - send
 
-## Note
+    - [lab](./lab/7.%20JWT%20authentication%20bypass%20via%20algorithm%20confusion.md)
 
-## References
+8. algorithm confusion with no exposed key:
+    - try to get 2 different jwt
+    - we can calculate public key:
 
-[main](https://portswigger.net/web-security/jwt)
-[lab](https://portswigger.net/web-security/all-labs#jwt)
+    ```bash
+    docker run --rm -it portswigger/sig2n <token1> <token2>
+    ```
+
+    - same as 7
+    - [lab](./lab/8.%20JWT%20authentication%20bypass%20via%20algorithm%20confusion%20with%20no%20exposed%20key.md)
