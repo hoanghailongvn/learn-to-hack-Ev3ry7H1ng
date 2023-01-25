@@ -1,5 +1,24 @@
 # [PHP - Apache configuration](https://www.root-me.org/en/Challenges/Web-Server/PHP-Apache-configuration)
 
+## Solutions update 1
+
+I came back here when an intern in my company stuck on this challenge and asked me.
+
+He said that he did exactly what i did but it did not work. so i tried again and it was true.
+
+It's seem like php execution is disabled in this folder.
+
+So I walked around google to find a way to turn on php execution with .htaccess: <https://www.php.net/manual/en/apache.configuration.php>
+
+updated solution:
+
+- .htaccess
+
+```config
+AddHandler application/x-httpd-php .html
+php_flag engine on
+```
+
 ## Solutions
 
 - Upload một file có tên `.htaccess` với nội dung là:
