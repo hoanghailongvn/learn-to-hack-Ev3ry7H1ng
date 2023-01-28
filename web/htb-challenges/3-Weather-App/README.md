@@ -48,7 +48,7 @@ Example:
 http.get('http://127.0.0.1:8000/?param=x\u{0120}HTTP/1.1\u{010D}\u{010A}Host:{\u0120}127.0.0.1:8000\u{010D}\u{010A}\u{010D}\u{010A}GET\u{0120}/private')
 ```
 
-in nodejs, it see this:
+in nodejs, it looks like this:
 
 ```url
 http.get('http://127.0.0.1:8000/?param=xĠHTTP/1.1čĊHost:{Ġ}127.0.0.1:8000čĊčĊGETĠ/private')
