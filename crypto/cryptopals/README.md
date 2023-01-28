@@ -1,6 +1,6 @@
 # [Cryptopals](https://cryptopals.com/)
 
-This is a collection of exercises that demonstrate attacks on real-world crypto. I learned the fundamentals of cryptography here.
+This is a collection of exercises that demonstrate attacks on real-world crypto. I learned the fundamentals of cryptography from here.
 
 [set1](./set1/):
 
