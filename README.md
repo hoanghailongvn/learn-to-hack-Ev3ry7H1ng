@@ -2,14 +2,17 @@
 
 This repository is to summarize, take notes of the knowledge, experience,... everything I have learned in cyber security.
 
-## Root-me
+## web
 
-root-me: [link](https://www.root-me.org/SeaDragnoL)
+I am learning web hacking on 3 platforms:
 
-## Hack The Box
+- [root-me](./web/root-me/)
+- [portswigger](./web/portswigger/)
+- [hackthebox](./web/htb-challenges/)
 
-Hack The Box is a massive, online cybersecurity training platform, allowing individuals, companies, universities and all kinds of organizations around the world to level up their hacking skills.
+## cryptography and binary exploit
 
-here is my profile: <https://app.hackthebox.com/profile/879344>
+I learned about cryptography and binary exploitation through 2 challenge series:
 
-## Portswigger
+- [cryptopals](./crypto/cryptopals/)
+- [protostar](./pwn/protostar/)
