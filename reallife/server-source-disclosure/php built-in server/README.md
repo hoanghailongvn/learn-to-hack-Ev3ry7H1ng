@@ -7,7 +7,19 @@ docker build . -t phptest
 docker run -p 8888:8888 phptest
 ```
 
-![poc.png](./img/poc.png)
+![poc.png](./../img/poc.png)
+
+```http
+GET /index.php HTTP/1.1
+Host: localhost:8888
+Content-Length: 29
+
+
+GET /xyz.xyz HTTP/1.1
+
+
+
+```
 
 ## nuclei template
 

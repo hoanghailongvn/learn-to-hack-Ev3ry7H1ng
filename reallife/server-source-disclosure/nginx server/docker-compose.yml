@@ -1,0 +1,18 @@
+version: "3.8"
+services:
+  nginx:
+    container_name: nginx
+    build: ./docker/nginx
+    command: nginx -g "daemon off;"
+    links:
+      - php
+    ports:
+      - "80:80"
+    volumes:
+      - ./src:/var/www/html
+  php:
+    container_name: php
+    build: ./docker/php
+    volumes:
+      - ./src:/var/www/html
+    working_dir: /var/www/html
