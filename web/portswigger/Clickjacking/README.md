@@ -8,6 +8,7 @@
   - [3. Clickjacking with a frame buster script](./lab/3.%20Clickjacking%20with%20a%20frame%20buster%20script.md)
 - practitioner:
   - [4. Exploiting clickjacking vulnerability to trigger DOM-based XSS](./lab/4.%20Exploiting%20clickjacking%20vulnerability%20to%20trigger%20DOM-based%20XSS.md)
+  - [5. Multistep clickjacking](./lab/5.%20Multistep%20clickjacking.md)
 
 ## Summary
 
