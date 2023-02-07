@@ -9,17 +9,17 @@
 - [XSS](./../Cross-site%20scripting/)
 - [CSRF](./../Cross-site%20request%20forgery%20(CSRF)/)
 - [XXE](./../XXE%20injection/)
-- Clickjacking
-- CORS
-- Request smuggling
+- [Clickjacking](./../Clickjacking/)
+- [CORS](./../CORS/)
+- [Request smuggling](./../Request%20smuggling/)
 - [SSTi](./../Server-side%20template%20injection/)
-- Insecure deserialization
+- [Insecure deserialization](./../Insecure%20deserialization/)
 - [Directory traversal](./../Directory%20traversal/)
 - [Access control](./../Access%20control/)
 - [Authentication vulnerabilities](./../Authentication%20Vulnerabilities/)
 - [Business logic vulnerabilities](./../Business%20logic%20vulnerabilities/)
-- WebSockets
-- Web cache poisoning
+- [WebSockets](./../WebSockets/)
+- [Web cache poisoning](./../Web%20cache%20poisoning/)
 - [Information disclosure vulnerabilities](./../Information%20disclosure%20vulnerabilities/)
 - [OS command injection](./../OS%20command%20injection/)
 
@@ -50,7 +50,7 @@
 
 If you find an SSRF vulnerability, you can use it to read files by accessing an internal-only service, running on localhost on port 6566.
 
- learn to troubleshoot JavaScript.
+learn to troubleshoot JavaScript.
 
 ## References
 
