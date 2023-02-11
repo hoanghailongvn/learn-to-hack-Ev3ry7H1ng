@@ -8,8 +8,7 @@
 - practitioner
   - [2. Forced OAuth profile linking](./lab/2.%20Forced%20OAuth%20profile%20linking.md)
   - [3. OAuth account hijacking via redirect_uri](./lab/3.%20OAuth%20account%20hijacking%20via%20redirect_uri.md)
-
-
+  - [4. Stealing OAuth access tokens via an open redirect](./lab/4.%20Stealing%20OAuth%20access%20tokens%20via%20an%20open%20redirect.md)
 
 ## Summary
 
