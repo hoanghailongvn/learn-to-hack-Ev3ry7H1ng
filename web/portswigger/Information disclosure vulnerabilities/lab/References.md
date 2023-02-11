@@ -1,1 +1,0 @@
-https://portswigger.net/web-security/all-labs#information-disclosure
