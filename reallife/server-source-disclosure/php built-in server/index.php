@@ -1,1 +1,0 @@
-<a href="<?php echo htmlentities($_SERVER['REQUEST_URI']) ?>">Unexpected url</a>
