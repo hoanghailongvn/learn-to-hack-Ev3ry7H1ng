@@ -20,10 +20,6 @@
 
 ## Summary
 
-dirsearch:
-
-- `robots.txt`
-
 logic:
 
 - 1. directly access admin panel by normal user account
