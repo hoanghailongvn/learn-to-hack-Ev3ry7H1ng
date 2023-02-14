@@ -9,7 +9,7 @@
 
 - practitioner:
   - [4. Username enumeration via subtly different responses](./lab/4.%20Username%20enumeration%20via%20subtly%20different%20responses.md)
-  - 
+  - [5. Username enumeration via response timing](./lab/5.%20Username%20enumeration%20via%20response%20timing.md)
 
 ## Lab usernames and passwords
 
