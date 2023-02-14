@@ -15,6 +15,7 @@
   - [10. Exploiting HTTP request smuggling to deliver reflected XSS](./lab/10.%20Exploiting%20HTTP%20request%20smuggling%20to%20deliver%20reflected%20XSS.md)
   - [11. Response queue poisoning via H2.TE request smuggling](./lab/11.%20Response%20queue%20poisoning%20via%20H2.TE%20request%20smuggling.md)
   - [12. H2.CL request smuggling](./lab/12.%20H2.CL%20request%20smuggling.md)
+  - [13. HTTP/2 request smuggling via CRLF injection](./lab/13.%20HTTP2%20request%20smuggling%20via%20CRLF%20injection.md)
 
 ## Detect
 
