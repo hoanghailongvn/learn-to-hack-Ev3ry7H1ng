@@ -16,15 +16,19 @@
   - [11. Response queue poisoning via H2.TE request smuggling](./lab/11.%20Response%20queue%20poisoning%20via%20H2.TE%20request%20smuggling.md)
   - [12. H2.CL request smuggling](./lab/12.%20H2.CL%20request%20smuggling.md)
   - [13. HTTP/2 request smuggling via CRLF injection](./lab/13.%20HTTP2%20request%20smuggling%20via%20CRLF%20injection.md)
+  - [14. HTTP/2 request splitting via CRLF injection](./lab/14.%20HTTP2%20request%20splitting%20via%20CRLF%20injection.md)
 
 ## Detect
 
 1. burpsuite active scan
-2. burpsuite `HTTP request smuggler` extension
+
+    - can detect smuggling but not in detail
+
+2. burpsuite `HTTP request smuggler` extension (best)
 
     ![extension.png](./img/extension-detect.png)
 
-3. smuggler.py:
+3. smuggler.py (can't detect HTTP/2):
 
     - <https://github.com/defparam/smuggler>
     - usage:
@@ -32,6 +36,16 @@
         ```bash
         python smuggler.py -u <url>
         ```
+
+## Working with HTTP/2 in burpsuite
+
+disable `Update Content-Length` and enable `Allow HTTP/2 ALPN override`
+
+![settings.png](./img/lab-12-settings.png)
+
+modify HTTP/2 headers in inspector tab
+
+![inspector.png](./img/lab-13-extensions-payload-2.png)
 
 ## Display non-prinable characters
 
