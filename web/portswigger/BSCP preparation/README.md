@@ -52,6 +52,17 @@ If you find an SSRF vulnerability, you can use it to read files by accessing an 
 
 learn to troubleshoot JavaScript.
 
+## Scan and enumerate
+
+- burpsuite active scan
+- dirsearch:
+
+```text
+.git
+robots.txt
+
+```
+
 ## References
 
 <https://medium.com/@ryan.beebe/burp-suite-certified-practitioner-exam-review-9077b14f8eb1>
