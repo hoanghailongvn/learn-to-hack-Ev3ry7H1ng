@@ -19,6 +19,8 @@
 - `Age: n`: cache has lived for `n` seconds
 - The cache on labs expire every 30 seconds.
 
+## Detect
+
 ## Summary
 
 1. Identify and evaluate unkeyed inputs:
