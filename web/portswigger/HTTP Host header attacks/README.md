@@ -8,3 +8,8 @@
 
 - practitioner:
   - [3. Web cache poisoning via ambiguous requests](./lab/3.%20Web%20cache%20poisoning%20via%20ambiguous%20requests.md)
+
+## Detect
+
+1. arbitrary `Host` header
+
