@@ -13,4 +13,3 @@
 ## Summary
 
 - use burpsuite scanner or dir search tools
-- `/.git`
