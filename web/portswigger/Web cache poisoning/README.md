@@ -21,6 +21,8 @@
 
 ## Detect
 
+burpsuite `param miner` extension.
+
 ## Summary
 
 1. Identify and evaluate unkeyed inputs:
