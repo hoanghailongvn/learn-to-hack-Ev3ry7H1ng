@@ -60,6 +60,8 @@ learn to troubleshoot JavaScript.
 ```text
 .git
 robots.txt
+cgi-bin
+phpinfo.php
 
 ```
 
