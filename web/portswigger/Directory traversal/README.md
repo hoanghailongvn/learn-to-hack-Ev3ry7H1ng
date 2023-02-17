@@ -50,3 +50,5 @@ payloads:
   ```path
   ../../../../../../../../../../../../../../../../../../../etc/passwd%00.png
   ```
+
+burpsuite scanner can detected all the cases above except the `fixed first path` one.
