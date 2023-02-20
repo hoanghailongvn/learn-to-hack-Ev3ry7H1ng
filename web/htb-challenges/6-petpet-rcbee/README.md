@@ -6,3 +6,7 @@ Bees are comfy 🍯
 bees are great 🌟🌟🌟
 this is a petpet generator 👋
 let's join forces and save the bees today! 🐝
+
+## Characteristics
+
+- python, flask

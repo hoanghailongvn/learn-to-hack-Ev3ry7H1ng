@@ -46,12 +46,6 @@
 | File upload vulnerabilities |     |     | ✔️  |
 | JWT | ✔️  | ✔️  |
 
-## Note
-
-If you find an SSRF vulnerability, you can use it to read files by accessing an internal-only service, running on localhost on port 6566.
-
-learn to troubleshoot JavaScript.
-
 ## Scan and enumerate
 
 - burpsuite active scan
@@ -62,8 +56,18 @@ learn to troubleshoot JavaScript.
 robots.txt
 cgi-bin
 phpinfo.php
-
+jwks.json
+.well-known/jwks.json
 ```
+
+## Note
+
+Please read before continuing
+There is always an administrator account with the username 'administrator', plus a lower-privileged account with a username in the following word list. The low-privileged user may have an insecure password in the following list.
+
+Each application has up to one active user, who will be logged in either as a user or an Administrator. You can assume that they will visit the homepage of the site every 15 seconds, and click any links in any emails they receive from the application. You can use exploit server's 'send to victim' functionality to target them with reflected vulnerabilities.
+
+If you find an SSRF vulnerability, you can use it to read the files by accessing an internal-only service running on locahost on port 6566.
 
 ## References
 
