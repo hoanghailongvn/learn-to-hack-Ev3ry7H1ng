@@ -20,4 +20,4 @@
     - port 27017: mongod
     - tools: mongo
 8. Synced
-    - 
+    - rsync
