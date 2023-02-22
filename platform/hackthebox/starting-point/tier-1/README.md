@@ -17,3 +17,7 @@
 5. Three
     - aws
     - tools: awscli, aws, gobuster scan subdomain
+6. Ignition
+    - virtual hosts
+    - common credential
+7. 
