@@ -17,3 +17,7 @@
     - port 80: http
     - tools: gobuster
 7. Mongod
+    - port 27017: mongod
+    - tools: mongo
+8. Synced
+    - 
