@@ -13,3 +13,7 @@
 5. Explosion
     - port 3389: rdp
     - tools: xfreerdp
+6. Preignition
+    - port 80: http
+    - tools: gobuster
+7. Mongod
