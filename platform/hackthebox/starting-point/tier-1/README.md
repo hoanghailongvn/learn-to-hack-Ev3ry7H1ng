@@ -33,3 +33,7 @@
     - groovy
     - default credentials
     - reverse shell
+10. Tactics
+    - smb
+    - default credentials
+    - tools: smbclient, impacket
