@@ -28,3 +28,8 @@
     - postgresql
     - port forwarding: local, remote, dynamic
     - tools: ssh, psql
+9. Pennyworth
+    - jenkins
+    - groovy
+    - default credentials
+    - reverse shell
