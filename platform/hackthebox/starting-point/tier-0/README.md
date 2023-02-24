@@ -1,4 +1,4 @@
-]# Starting Point: TIER 0
+# Starting Point: TIER 0
 
 ## Summary
 
