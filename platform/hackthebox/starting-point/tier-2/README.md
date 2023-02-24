@@ -6,3 +6,6 @@
     - smb, mssql
     - create reverse shell
     - tools: smbclient, winPEAS, mssqlclient.py, psexec.py
+2. Oopsie:
+    - web: IDOR, access control vulnerability, file upload php
+    - privilege escalation via suid
