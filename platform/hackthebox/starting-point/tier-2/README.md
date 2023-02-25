@@ -17,3 +17,7 @@
 4. [Unified](./4.%20Unified.md)
     - log4shell, mongodb, unifi network
     - tools: mongo, makepasswd
+5. [Included](./5.%20Included.md)
+    - web: LFI
+    - tftp: use metasploit to upload file through tftp => php simple-backdoor
+    - privilege escalation via lxd (alpine)
