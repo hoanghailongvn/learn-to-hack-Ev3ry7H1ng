@@ -14,3 +14,6 @@
     - SQLi, --os-shell, reverse shell
     - sudo -l: `vi`
     - tools: zip2john, john, sqlmap
+4. [Unified](./4.%20Unified.md)
+    - log4shell, mongodb, unifi network
+    - tools: mongo, makepasswd
