@@ -1,4 +1,4 @@
-# pwn
+# web
 
 1. [root-me](./root-me/)
 
