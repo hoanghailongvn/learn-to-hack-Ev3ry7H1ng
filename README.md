@@ -2,17 +2,13 @@
 
 This repository is to summarize, take notes of the knowledge, experience,... everything I have learned in cyber security.
 
-## web
+## [I. pwn](./pwn/)
 
-I am learning web hacking on 3 platforms:
+## [II. cryptography](./cryptography/)
 
-- [root-me](./web/root-me/)
-- [portswigger](./web/portswigger/)
-- [hackthebox](./web/htb-challenges/)
+## [III. web](./web/)
 
-## cryptography and binary exploit
+## [X - platform](./platform/)
 
-I learned about cryptography and binary exploitation through 2 challenge series:
 
-- [cryptopals](./crypto/cryptopals/)
-- [protostar](./pwn/protostar/)
+
