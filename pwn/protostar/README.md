@@ -1,6 +1,10 @@
 # [Protostar](https://exploit.education/protostar/)
 
-This is my writeup for all the [protostar challenges](<https://exploit.education/protostar/>) written in Vietnamese: .
+Protostar challenges are a series of computer security challenges designed learn and practice basic exploitation techniques.
+
+The challenges cover a wide range of topics, including binary exploitation, format string vulnerabilities, stack overflows, heap overflows, and more.
+
+This is my writeup for all the [protostar challenges](<https://exploit.education/protostar/>) written in Vietnamese.
 
 ## Set 0x01 :: Stack
 
