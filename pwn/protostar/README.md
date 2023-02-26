@@ -4,7 +4,7 @@ Protostar challenges are a series of computer security challenges designed learn
 
 The challenges cover a wide range of topics, including binary exploitation, format string vulnerabilities, stack overflows, heap overflows, and more.
 
-This is my writeup for all the [protostar challenges](<https://exploit.education/protostar/>) written in Vietnamese.
+These are my writeups for all the [protostar challenges](<https://exploit.education/protostar/>) written in Vietnamese.
 
 ## Set 0x01 :: Stack
 
