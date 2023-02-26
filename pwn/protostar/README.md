@@ -49,4 +49,3 @@ This is my writeup for all the [protostar challenges](<https://exploit.education
 ## Reference
 
 Binary exploitation: <https://youtube.com/playlist?list=PLhixgUqwRTjxglIswKp9mpkfPNfHkzyeN>
-
