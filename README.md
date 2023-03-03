@@ -8,7 +8,12 @@ This repository is to summarize, take notes of the knowledge, experience,... eve
 
 ## [III. web](./web/)
 
+得意: [portswigger](./web/portswigger/)
+
 ## [X - platform](./platform/)
 
+My Profile
 
-
+- [hackthebox](https://app.hackthebox.com/profile/879344)
+- [root-me](https://www.root-me.org/SeaDragnoL)
+- [tryhackme](https://tryhackme.com/p/seadragnol)
