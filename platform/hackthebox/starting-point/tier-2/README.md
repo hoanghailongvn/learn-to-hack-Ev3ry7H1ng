@@ -22,6 +22,6 @@
     - tftp: use metasploit to upload file through tftp => php simple-backdoor
     - privilege escalation via lxd (alpine)
 6. [Markup](./6.%20Markup.md)
-    - web: XXE
-    - use ssh private key to login to target
-    - 
+    - web: default credential, XXE
+    - XXE => ssh private key
+    - a file scheduled by admin can be edited by normal user
