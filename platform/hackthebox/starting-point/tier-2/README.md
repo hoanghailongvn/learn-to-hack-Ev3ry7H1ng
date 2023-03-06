@@ -25,3 +25,10 @@
     - web: default credential, XXE
     - XXE => ssh private key
     - a file scheduled by admin can be edited by normal user
+7. [Base](./7.%20Base.md)
+    - web:
+      - directory listing
+      - vim .swp file
+      - php strcmp() problem
+      - file upload vulnerabilities
+    - privilege escalation via `find exec`
